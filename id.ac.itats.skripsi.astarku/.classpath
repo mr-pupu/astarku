@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="id/ac/itats/skripsi/shortestpath/princeton/" kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/mapsforge/mapsforge-map-android/0.4.0-SNAPSHOT/mapsforge-map-android-0.4.0-SNAPSHOT-jar-with-dependencies.jar" sourcepath="/M2_REPO/org/mapsforge/mapsforge-map-android/0.4.0-SNAPSHOT/mapsforge-map-android-0.4.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

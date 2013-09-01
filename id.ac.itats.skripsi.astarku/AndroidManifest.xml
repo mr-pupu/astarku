@@ -22,18 +22,18 @@
         <activity
             android:name="id.ac.itats.skripsi.astarku.BasicMapViewer"
             android:label="@string/app_name" >
-        
+        <!--  
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
+            -->
         </activity>
         
         <activity
             android:name="id.ac.itats.skripsi.astarku.BasicMapViewerXml"
-            android:label="@string/app_name" >
+            android:label="@string/title_activity_xml" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

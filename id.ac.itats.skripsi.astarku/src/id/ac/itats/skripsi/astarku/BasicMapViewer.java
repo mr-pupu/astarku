@@ -6,6 +6,7 @@ import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
 import id.ac.itats.skripsi.util.MapMatchingUtil;
 import id.ac.itats.skripsi.util.MapviewUtils;
+import id.ac.itats.skripsi.util.Reporter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -282,22 +283,41 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 
 	// XXX ROUTING
 	protected void calcPath(final double fromLat, final double fromLon, final double toLat, final double toLon) {
-		new AsyncTask<Void, Integer, List<Vertex>>() {
+		new AsyncTask<Void, Integer, List<Vertex>>() {			
+			int mProgress = 100;
+			Handler mHandler = new Handler();
+			Runnable mProgressRunner = new Runnable() {
+				@Override
+				public void run() {
+					mProgress +=1;
 
+					int progress = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * mProgress;
+					setSupportProgress(progress);
+
+					if (reporter.isFinish() == false) {
+						mHandler.postDelayed(mProgressRunner, 300);
+					}
+				}
+			};
+			
 			Graph graph = GraphAdapter.getGraph();
-			int mProgress = 0;
+			Reporter reporter = new Reporter();
 
 			@Override
 			protected void onPreExecute() {
 
-				setSupportProgressBarVisibility(true);
-				
+				setSupportProgressBarVisibility(true);				
 
 			}
 
 			@Override
 			protected List<Vertex> doInBackground(Void... params) {
-								
+				
+				if (mProgress == 100) {
+                    mProgress = 0;
+                    mProgressRunner.run();
+                }
+				
 				Vertex source = MapMatchingUtil.doMatching(graph.getVerticeValues(), fromLat, fromLon);
 
 				System.out.println(source.id);
@@ -305,37 +325,20 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 				Vertex target = MapMatchingUtil.doMatching(graph.getVerticeValues(), toLat, toLon);
 
 				System.out.println(target.id);
-
-				AStar2 aStar2 = new AStar2(graph);
+				
+				
+				AStar2 aStar2 = new AStar2(graph, reporter);				
+				
 				List<Vertex> path = aStar2.computePaths(source, target);
 
-				// Dijkstra dijkstra = new Dijkstra();
-				// dijkstra.computePaths(graph, source);
-				// List<Vertex> path = dijkstra.getShortestPathTo(target);
-
-				// System.out.println(path);
-
-				
-				while (mProgress < 100) {
-					mProgress += 1;
-					try {
-						Thread.sleep(100);
-						publishProgress(mProgress);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-				
+//				while (mProgress < 100) {
+//					mProgress += 1;
+//
+//					SystemClock.sleep(300);
+//					publishProgress(mProgress);
+//
+//				}
 				return path;
-			}
-
-			@Override
-			protected void onProgressUpdate(Integer... values) {
-
-				int progress = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * values[0];
-				setSupportProgress(progress);
 			}
 
 			@Override
@@ -355,9 +358,9 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 					layerManager.redrawLayers();
 
 					layersOverlay.add(polyline);
-					logUser("Shortest path finish...");
+					logUser(reporter.getReport());
 				} else {
-					logUser("Sorry path not found...");
+					logUser(reporter.getReport());
 					for (Layer layer : layersOverlay) {
 						layerManager.getLayers().remove(layer);
 					}
@@ -370,6 +373,9 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 			}
 		}.execute();
 	}
+
+
+	    
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

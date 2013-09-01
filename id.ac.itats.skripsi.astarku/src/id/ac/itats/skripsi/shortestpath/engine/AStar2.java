@@ -3,6 +3,7 @@ package id.ac.itats.skripsi.shortestpath.engine;
 import id.ac.itats.skripsi.shortestpath.model.Edge;
 import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
+import id.ac.itats.skripsi.util.ProgressReporter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,16 +15,23 @@ public class AStar2 {
 	private double tLat;
 	private double tLon;
 	private Graph graph;
-
-	public AStar2(Graph graph) {
+	private ProgressReporter reporter;
+	
+	public AStar2(Graph graph, ProgressReporter reporter) {
 		this.graph = graph;
+		this.reporter = reporter;
 	}
 
 	public List<Vertex> computePaths(Vertex source, Vertex target) {
-		if (!graph.hasClearTree) {
-			graph.clearTree();
-		}
 
+		int process = 0;
+		reporter.finish(false);
+		
+		if (!graph.hasClearTree) {
+			graph.clearTree();		
+		}
+		
+		reporter.process(process);
 		tLat = Double.valueOf(target.lat);
 		tLon = Double.valueOf(target.lon);
 
@@ -36,11 +44,14 @@ public class AStar2 {
 		openList.add(source);
 
 		while (!openList.isEmpty()) {
+			reporter.process(process++);
 			Vertex current = openList.poll();
 			current.onClosedList = true;
-
+			
+			
 			if (current.equals(target)) {
-
+				reporter.report("Shortest path finish...!");
+				reporter.finish(true);
 				return reconstructPath(current);
 			}
 
@@ -77,7 +88,9 @@ public class AStar2 {
 				}
 			}
 		}
-
+		
+		reporter.report("path not found!");
+		reporter.finish(true);
 		return null;
 	}
 

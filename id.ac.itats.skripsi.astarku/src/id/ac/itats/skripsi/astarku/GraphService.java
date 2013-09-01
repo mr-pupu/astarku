@@ -1,7 +1,6 @@
 package id.ac.itats.skripsi.astarku;
 
 import id.ac.itats.skripsi.databuilder.GraphAdapter;
-import id.ac.itats.skripsi.util.MapviewUtils;
 import id.ac.itats.skripsi.util.StopWatch;
 import android.app.Service;
 import android.content.Intent;

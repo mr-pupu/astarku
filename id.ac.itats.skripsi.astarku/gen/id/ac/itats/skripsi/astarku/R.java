@@ -1054,7 +1054,12 @@ containing a value of this type.
          */
         public static final int action_settings=0x7f09000f;
         public static final int app_name=0x7f09000d;
-        public static final int title_activity_xml=0x7f09000e;
+        public static final int list_navigation_history=0x7f090014;
+        /**  listnavigation item 
+         */
+        public static final int list_navigation_home=0x7f090012;
+        public static final int list_navigation_search=0x7f090013;
+        public static final int title_activity_main=0x7f09000e;
     }
     public static final class style {
         /** 

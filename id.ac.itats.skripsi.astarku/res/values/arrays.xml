@@ -13,8 +13,8 @@
     </string-array>
     
     <string-array name="locations">
-        <item>Home</item>
-        <item>Search</item>
-        <item>History</item>
+        <item>@string/list_navigation_home</item>
+        <item>@string/list_navigation_search</item>
+        <item>@string/list_navigation_history</item>
     </string-array>
 </resources>

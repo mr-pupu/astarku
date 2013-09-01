@@ -261,7 +261,7 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 
 		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
 		setSupportProgressBarVisibility(false);
-		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		mLocations = getResources().getStringArray(R.array.locations);
 		Context context = getSupportActionBar().getThemedContext();
@@ -331,13 +331,6 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 				
 				List<Vertex> path = aStar2.computePaths(source, target);
 
-//				while (mProgress < 100) {
-//					mProgress += 1;
-//
-//					SystemClock.sleep(300);
-//					publishProgress(mProgress);
-//
-//				}
 				return path;
 			}
 
@@ -381,17 +374,25 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu sub = menu.addSubMenu("Option");
 		sub.setIcon(R.drawable.abs__ic_menu_moreoverflow_normal_holo_dark);
-		sub.add(0, R.style.AppTheme, 0, "Setting");
-		sub.add(0, R.style.AppTheme, 0, "Help");
-		sub.add(0, R.style.AppTheme, 0, "About");
+		sub.add(0, R.id.action_settings, 0, "Setting");
+		sub.add(0, R.id.action_help, 0, "Help");
+		sub.add(0, R.id.action_about, 0, "About");
 		sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_NEVER);
+		
+		
 		return true;
 	}
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		System.out.println("Selected: " + mLocations[itemPosition]);
+//		System.out.println("Selected: " + mLocations[itemPosition] +" - "  + itemId);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onOptionsItemSelected(item);
 	}
 
 }

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Astarku</string>
-    <string name="title_activity_test">Astarku</string>
+    <string name="title_activity_xml">AstarkuXML</string>
     
     <!-- actionaction -->
     <string name="action_settings">Settings</string>

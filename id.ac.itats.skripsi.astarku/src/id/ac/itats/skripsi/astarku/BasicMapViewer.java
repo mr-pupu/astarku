@@ -52,7 +52,7 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 	protected final String TAG = BasicMapViewer.class.getSimpleName();
 
 	// Activity
-	private String[] mLocations;
+	protected String[] mLocations;
 	// Mapview
 	protected String mapFile = "surabaya_new.map";
 
@@ -60,11 +60,11 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 	protected PreferencesFacade preferencesFacade;
 	protected TileCache tileCache;
 
-	private GestureDetector gestureDetector;
-	private LayerManager layerManager;
-	private volatile boolean shortestPathRunning = false;
-	private LatLong start, end;
-	private List<Layer> layersOverlay = new ArrayList<Layer>();
+	protected GestureDetector gestureDetector;
+	protected LayerManager layerManager;
+	protected volatile boolean shortestPathRunning = false;
+	protected LatLong start, end;
+	protected List<Layer> layersOverlay = new ArrayList<Layer>();
 
 	protected SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
 
@@ -260,7 +260,7 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 
 		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
 		setSupportProgressBarVisibility(false);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
 
 		mLocations = getResources().getStringArray(R.array.locations);
 		Context context = getSupportActionBar().getThemedContext();

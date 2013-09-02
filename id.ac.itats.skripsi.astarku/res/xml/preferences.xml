@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/preferences_locationupdate" >
+        <CheckBoxPreference
+            android:key="@string/key_preferences_locationupdate"
+            android:summary="@string/summary_preferences_locationupdate"
+            android:title="@string/title_preferences_locationupdate" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

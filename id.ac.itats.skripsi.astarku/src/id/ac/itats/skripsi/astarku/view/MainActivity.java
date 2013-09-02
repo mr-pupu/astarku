@@ -8,12 +8,17 @@ import org.mapsforge.map.layer.LayerManager;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.model.MapViewPosition;
 
-import com.actionbarsherlock.view.MenuItem;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.actionbarsherlock.view.MenuItem;
+
 public class MainActivity extends BasicMapViewer {
+	private static final int RESULT_SETTINGS = 1;
 
 	@Override
 	protected MapView getMapView() {
@@ -41,7 +46,33 @@ public class MainActivity extends BasicMapViewer {
 	@Override
 	protected void addLayers(LayerManager layerManager, TileCache tileCache, MapViewPosition mapViewPosition) {
 		super.addLayers(layerManager, tileCache, mapViewPosition);
+	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		switch (requestCode) {
+		case RESULT_SETTINGS:
+			boolean isLocationUpdate = sharedPrefs.getBoolean(getString(R.string.key_preferences_locationupdate), false);
+			System.out.println(isLocationUpdate);
+			
+			if (isLocationUpdate == true) {
+				super.myLocationOverlay.enableMyLocation(true);
+				setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
+				super.myLocationOverlay.requestRedraw();
+
+			} else {
+				super.myLocationOverlay.disableMyLocation();
+				super.myLocationOverlay.requestRedraw();
+			}
+			log("" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -68,17 +99,32 @@ public class MainActivity extends BasicMapViewer {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			logUser("" + item.getTitle());
+
+		case R.id.action_mylocation:
+			if (super.myLocationOverlay.isMyLocationEnabled()) {
+				setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
+				super.myLocationOverlay.requestRedraw();
+			} else {
+				// TODO show dialog or go preference activity
+				logUser("User location currently disable !");
+			}
+
+			break;
+
+		case R.id.action_preferences:
+			Intent i = new Intent(this, PreferencesActivity.class);
+			startActivityForResult(i, RESULT_SETTINGS);
 			break;
 
 		case R.id.action_help:
 			logUser("" + item.getTitle());
+
 			break;
 
 		case R.id.action_about:
 			logUser("" + item.getTitle());
 			break;
+
 		default:
 			break;
 		}

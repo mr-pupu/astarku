@@ -19,7 +19,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends BasicMapViewer {
 	private static final int RESULT_SETTINGS = 1;
-
+	private SharedPreferences sharedPrefs;
+	
 	@Override
 	protected MapView getMapView() {
 		setContentView(R.layout.mapviewer);
@@ -49,9 +50,16 @@ public class MainActivity extends BasicMapViewer {
 	}
 
 	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		super.myLocationOverlay.disableMyLocation();
+	}
+	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
 		
 		switch (requestCode) {
 		case RESULT_SETTINGS:
@@ -60,14 +68,21 @@ public class MainActivity extends BasicMapViewer {
 			
 			if (isLocationUpdate == true) {
 				super.myLocationOverlay.enableMyLocation(true);
-				setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
+				
+				log("" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
 				super.myLocationOverlay.requestRedraw();
 
-			} else {
+			} 
+			if (isLocationUpdate == false) {
+				log("" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
 				super.myLocationOverlay.disableMyLocation();
 				super.myLocationOverlay.requestRedraw();
 			}
-			log("" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
+			
+			boolean isLocationSnap = sharedPrefs.getBoolean(getString(R.string.key_preferences_locationsnap), false);
+			super.myLocationOverlay.setSnapToLocationEnabled(isLocationSnap);
+			
+			
 			break;
 
 		default:
@@ -101,7 +116,7 @@ public class MainActivity extends BasicMapViewer {
 		switch (item.getItemId()) {
 
 		case R.id.action_mylocation:
-			if (super.myLocationOverlay.isMyLocationEnabled()) {
+			if (super.myLocationOverlay.isMyLocationEnabled()) {			
 				setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
 				super.myLocationOverlay.requestRedraw();
 			} else {

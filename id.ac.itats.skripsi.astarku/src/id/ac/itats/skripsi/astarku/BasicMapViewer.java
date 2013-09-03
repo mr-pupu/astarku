@@ -398,9 +398,9 @@ public class BasicMapViewer extends SherlockActivity implements ActionBar.OnNavi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
+		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
 		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
-
+		
 		return true;
 	}
 

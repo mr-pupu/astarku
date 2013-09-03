@@ -13,6 +13,7 @@
     <string name="action_about">About</string>
     <string name="action_mylocation">Location</string>
     <string name="action_option">Location</string>
+    <string name="action_panic">Panic</string>
 
     <!-- listnavigation item -->
     <string name="list_navigation_home">Home</string>
@@ -25,4 +26,8 @@
     <string name="title_preferences_locationupdate">Enable Update Location</string>
     <string name="summary_preferences_locationupdate">If enable, astarku always track your location</string>
 
+    <string name="key_preferences_locationsnap">key_preferences_locationsnap</string>
+    <string name="title_preferences_locationsnap">Enable Snap to Location</string>
+    <string name="summary_preferences_locationsnap">If enable, astarku always snap location on mapview</string>
 </resources>
+

@@ -13,7 +13,6 @@ public class PreferencesActivity extends SherlockPreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		addPreferencesFromResource(R.xml.preferences);
 	}
 
@@ -27,6 +26,7 @@ public class PreferencesActivity extends SherlockPreferenceActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			
 			NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
 			return true;
 

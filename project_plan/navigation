@@ -1,0 +1,74 @@
+<!--ASTARKU -->
+
+<Menu>
+-HOME
+-SEARCH
+-HISTORY
+-ROUTING
+--MYLOCATION
+--SAVE ROUTE
+--RESTICTED LOCATION
+-PANIC
+-OPTION
+--PREFERENCES
+--HELP
+--ABOUT
+</menu>
+
+<content>
+<home>
+- mapview
+- quick route (start-end marker)
+- quick search
+</home>
+
+<search>
+-using sugestion
+-- by way
+-- by location
+-- by coordinat
+</search>
+
+<history>
+-routing history
+-show on map
+-animate route
+</history>
+
+<routing>
+
+<mylocation>
+- quick route (my location as start)
+</mylocation>
+
+<saveroute>
+- save route (save to db, show on history)
+</saveroute>
+
+</routing>
+
+<panic>
+- immediate route
+
+</panic>
+<option>
+<preferences>
+- user details
+- update location (on/off)
+- map file
+- graphDB
+</preferences>
+
+<help>
+-icon legend
+- how to use
+</help>
+
+<about>
+- developer
+<about>
+<option>
+</content>
+
+
+

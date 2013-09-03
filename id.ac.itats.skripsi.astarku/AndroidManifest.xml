@@ -26,7 +26,8 @@
 
         <activity
             android:name="id.ac.itats.skripsi.astarku.view.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +39,8 @@
 
         <activity
             android:name="id.ac.itats.skripsi.astarku.view.PreferencesActivity"
-            android:label="@string/title_activity_preferences" >
+            android:label="@string/title_activity_preferences" 
+            android:uiOptions="splitActionBarWhenNarrow">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="id.ac.itats.skripsi.astarku.view.MainActivity" />

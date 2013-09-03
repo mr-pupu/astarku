@@ -6,6 +6,11 @@
             android:key="@string/key_preferences_locationupdate"
             android:summary="@string/summary_preferences_locationupdate"
             android:title="@string/title_preferences_locationupdate" />
+        
+        <CheckBoxPreference
+            android:key="@string/key_preferences_locationsnap"
+            android:summary="@string/summary_preferences_locationsnap"
+            android:title="@string/title_preferences_locationsnap" />
     </PreferenceCategory>
 
 </PreferenceScreen>

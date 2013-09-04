@@ -691,10 +691,32 @@ containing a value of this type.
         public static final int abs__bright_foreground_disabled_holo_light=0x7f070005;
         public static final int abs__bright_foreground_holo_dark=0x7f070002;
         public static final int abs__bright_foreground_holo_light=0x7f070003;
-        public static final int abs__primary_text_disable_only_holo_dark=0x7f070006;
-        public static final int abs__primary_text_disable_only_holo_light=0x7f070007;
-        public static final int abs__primary_text_holo_dark=0x7f070008;
-        public static final int abs__primary_text_holo_light=0x7f070009;
+        public static final int abs__primary_text_disable_only_holo_dark=0x7f07001c;
+        public static final int abs__primary_text_disable_only_holo_light=0x7f07001d;
+        public static final int abs__primary_text_holo_dark=0x7f07001e;
+        public static final int abs__primary_text_holo_light=0x7f07001f;
+        public static final int black_midnightblue=0x7f07000f;
+        public static final int black_neverblue=0x7f070010;
+        public static final int black_wetasphalt=0x7f07000e;
+        public static final int blue_belizehole=0x7f07000b;
+        public static final int blue_petermanriver=0x7f07000a;
+        public static final int brown_carrot=0x7f070013;
+        public static final int brown_pumpkin=0x7f070014;
+        public static final int gray_asbestos=0x7f07001b;
+        public static final int gray_clouds=0x7f070017;
+        public static final int gray_concrete=0x7f07001a;
+        public static final int gray_mygray=0x7f070018;
+        public static final int gray_silver=0x7f070019;
+        public static final int green_emerald=0x7f070008;
+        public static final int green_greensea=0x7f070007;
+        public static final int green_nephrirtis=0x7f070009;
+        public static final int green_turquoise=0x7f070006;
+        public static final int red_alizarin=0x7f070015;
+        public static final int red_polegranate=0x7f070016;
+        public static final int violet_amethyst=0x7f07000c;
+        public static final int violet_wisteria=0x7f07000d;
+        public static final int yellow_orange=0x7f070012;
+        public static final int yellow_sunflower=0x7f070011;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -799,7 +821,7 @@ containing a value of this type.
         public static final int activity_vertical_margin=0x7f080010;
     }
     public static final class drawable {
-        public static final int ab_bg_black=0x7f02007d;
+        public static final int ab_bg_black=0x7f02007e;
         public static final int abs__ab_bottom_solid_dark_holo=0x7f020000;
         public static final int abs__ab_bottom_solid_inverse_holo=0x7f020001;
         public static final int abs__ab_bottom_solid_light_holo=0x7f020002;
@@ -925,6 +947,7 @@ containing a value of this type.
         public static final int marker_green=0x7f02007a;
         public static final int marker_red=0x7f02007b;
         public static final int person=0x7f02007c;
+        public static final int stat_sample=0x7f02007d;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050020;
@@ -1013,8 +1036,9 @@ containing a value of this type.
         public static final int abs__search_view=0x7f030013;
         public static final int abs__simple_dropdown_hint=0x7f030014;
         public static final int mapviewer=0x7f030015;
-        public static final int sherlock_spinner_dropdown_item=0x7f030016;
-        public static final int sherlock_spinner_item=0x7f030017;
+        public static final int preferences=0x7f030016;
+        public static final int sherlock_spinner_dropdown_item=0x7f030017;
+        public static final int sherlock_spinner_item=0x7f030018;
     }
     public static final class menu {
         public static final int main_menu=0x7f0d0000;
@@ -1060,33 +1084,38 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
-        public static final int action_about=0x7f0a0012;
-        public static final int action_help=0x7f0a0011;
-        public static final int action_mylocation=0x7f0a0013;
-        public static final int action_option=0x7f0a0014;
-        public static final int action_panic=0x7f0a0015;
+        public static final int action_about=0x7f0a0015;
+        public static final int action_help=0x7f0a0014;
+        public static final int action_mylocation=0x7f0a0016;
+        public static final int action_option=0x7f0a0017;
+        public static final int action_panic=0x7f0a0018;
         /**  actionaction 
          */
-        public static final int action_preferences=0x7f0a0010;
+        public static final int action_preferences=0x7f0a0013;
         public static final int app_name=0x7f0a000d;
-        public static final int key_preferences_locationsnap=0x7f0a001d;
-        public static final int key_preferences_locationupdate=0x7f0a001a;
-        public static final int list_navigation_history=0x7f0a0018;
+        public static final int astar__graphservice_finish=0x7f0a000f;
+        public static final int astar__graphservice_running=0x7f0a0010;
+        /**  service 
+         */
+        public static final int astar__graphservice_started=0x7f0a000e;
+        public static final int key_preferences_locationsnap=0x7f0a0020;
+        public static final int key_preferences_locationupdate=0x7f0a001d;
+        public static final int list_navigation_history=0x7f0a001b;
         /**  listnavigation item 
          */
-        public static final int list_navigation_home=0x7f0a0016;
-        public static final int list_navigation_search=0x7f0a0017;
+        public static final int list_navigation_home=0x7f0a0019;
+        public static final int list_navigation_search=0x7f0a001a;
         /**  preferences 
          */
-        public static final int preferences_locationupdate=0x7f0a0019;
-        public static final int summary_preferences_locationsnap=0x7f0a001f;
-        public static final int summary_preferences_locationupdate=0x7f0a001c;
+        public static final int preferences_locationupdate=0x7f0a001c;
+        public static final int summary_preferences_locationsnap=0x7f0a0022;
+        public static final int summary_preferences_locationupdate=0x7f0a001f;
         /**  activity 
          */
-        public static final int title_activity_main=0x7f0a000e;
-        public static final int title_activity_preferences=0x7f0a000f;
-        public static final int title_preferences_locationsnap=0x7f0a001e;
-        public static final int title_preferences_locationupdate=0x7f0a001b;
+        public static final int title_activity_main=0x7f0a0011;
+        public static final int title_activity_preferences=0x7f0a0012;
+        public static final int title_preferences_locationsnap=0x7f0a0021;
+        public static final int title_preferences_locationupdate=0x7f0a001e;
     }
     public static final class style {
         /** 
@@ -1146,6 +1175,7 @@ containing a value of this type.
         public static final int Theme_Sherlock_Light_DarkActionBar=0x7f0b0056;
         public static final int Theme_Sherlock_Light_NoActionBar=0x7f0b0058;
         public static final int Theme_Sherlock_NoActionBar=0x7f0b0057;
+        public static final int Theme_Styled=0x7f0b005b;
         public static final int Widget=0x7f0b0000;
         public static final int Widget_Sherlock_ActionBar=0x7f0b0002;
         public static final int Widget_Sherlock_ActionBar_Solid=0x7f0b0003;
@@ -1193,6 +1223,7 @@ containing a value of this type.
         public static final int Widget_Sherlock_SearchAutoCompleteTextView=0x7f0b0034;
         public static final int Widget_Sherlock_Spinner_DropDown_ActionBar=0x7f0b0024;
         public static final int Widget_Sherlock_TextView_SpinnerItem=0x7f0b0032;
+        public static final int Widget_Styled_ActionBar=0x7f0b005c;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

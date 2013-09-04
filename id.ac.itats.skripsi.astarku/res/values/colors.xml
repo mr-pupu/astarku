@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-	<drawable name="ab_bg_black">#aa000000</drawable>
+
+    <drawable name="ab_bg_black">#aa000000</drawable>
+
+    <color name="green_turquoise">#1abc9c</color>
+    <color name="green_greensea">#16a085</color>
+    <color name="green_emerald">#2ecc71</color>
+    <color name="green_nephrirtis">#27ae60</color>
+    <color name="blue_petermanriver">#3498db</color>
+    <color name="blue_belizehole">#2980b9</color>
+    <color name="violet_amethyst">#9b59b6</color>
+    <color name="violet_wisteria">#8e44ad</color>
+    <color name="black_wetasphalt">#34495e</color>
+    <color name="black_midnightblue">#2c3e50</color>
+    <color name="black_neverblue">#3C3C43</color>
+    <color name="yellow_sunflower">#f1c40f</color>
+    <color name="yellow_orange">#f39c12</color>
+    <color name="brown_carrot">#e67e22</color>
+    <color name="brown_pumpkin">#d35400</color>
+    <color name="red_alizarin">#e74c3c</color>
+    <color name="red_polegranate">#c0392b</color>
+    <color name="gray_clouds">#ecf0f1</color>
+    <color name="gray_mygray">#333333</color>
+    <color name="gray_silver">#bdc3c7</color>
+    <color name="gray_concrete">#95a5a6</color>
+    <color name="gray_asbestos">#7f8c8d</color>
+
 </resources>

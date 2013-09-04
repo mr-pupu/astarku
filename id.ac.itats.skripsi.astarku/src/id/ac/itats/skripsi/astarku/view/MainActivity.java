@@ -8,18 +8,24 @@ import org.mapsforge.map.layer.LayerManager;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.model.MapViewPosition;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
-public class MainActivity extends BasicMapViewer {
+public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigationListener {
 	private static final int RESULT_SETTINGS = 1;
 	private SharedPreferences sharedPrefs;
+	private String[] mLocations;
 	
 	@Override
 	protected MapView getMapView() {
@@ -51,9 +57,13 @@ public class MainActivity extends BasicMapViewer {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		initDecoration();
 		super.onCreate(savedInstanceState);
+				
+		
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		super.myLocationOverlay.disableMyLocation();
+		
 	}
 	
 	@Override
@@ -108,7 +118,15 @@ public class MainActivity extends BasicMapViewer {
 		default:
 			break;
 		}
-		return super.onNavigationItemSelected(itemPosition, itemId);
+		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+		
+		return true;
 	}
 
 	@Override
@@ -144,6 +162,26 @@ public class MainActivity extends BasicMapViewer {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+
+	protected void initDecoration() {
+		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+		requestWindowFeature(Window.FEATURE_PROGRESS);
+
+		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+		getSupportActionBar().setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+		setSupportProgressBarVisibility(false);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+		mLocations = getResources().getStringArray(R.array.locations);
+		Context context = getSupportActionBar().getThemedContext();
+		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.locations,
+				R.layout.sherlock_spinner_item);
+		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		getSupportActionBar().setListNavigationCallbacks(list, this);
 	}
 
 }

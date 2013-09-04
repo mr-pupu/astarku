@@ -19,7 +19,7 @@ public class DataBaseHelper {
 
 	private static String TAG = "DataBaseHelper";
 	private static DataBaseHelper instance;
-	private static String DB_NAME = "graphdb";
+	private static String DB_NAME = "astardb";
 	private static String DB_PATH = "";
 	private static SQLiteDatabase dataBase;
 	private Context context = RoutingEngine.getAppContext();

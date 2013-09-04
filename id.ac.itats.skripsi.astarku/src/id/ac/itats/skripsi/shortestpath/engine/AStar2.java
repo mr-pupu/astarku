@@ -1,9 +1,9 @@
 package id.ac.itats.skripsi.shortestpath.engine;
 
+import id.ac.itats.skripsi.astarku.processor.ProgressReporter;
 import id.ac.itats.skripsi.shortestpath.model.Edge;
 import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
-import id.ac.itats.skripsi.util.ProgressReporter;
 
 import java.util.ArrayList;
 import java.util.Collections;

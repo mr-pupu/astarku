@@ -22,7 +22,7 @@ public class GraphService extends Service {
 
 	@Override
 	public void onCreate() {
-		notification = getString(R.string.astar__graphservice_started);
+		notification = getString(R.string.astarku__graphservice_started);
 		
 		Runnable runnable = new Runnable() {
 
@@ -61,7 +61,7 @@ public class GraphService extends Service {
 	}
 
 	public CharSequence getNotification() {
-		notification = GraphAdapter.getGraph()!=null ? getString(R.string.astar__graphservice_finish)+"on "+getTime() : getString(R.string.astar__graphservice_running);
+		notification = GraphAdapter.getGraph()!=null ? getString(R.string.astarku__graphservice_finish)+"on "+getTime() : getString(R.string.astarku__graphservice_running);
 		return notification;
 	}
 

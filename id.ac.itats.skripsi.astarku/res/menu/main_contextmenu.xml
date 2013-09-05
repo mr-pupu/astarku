@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/astarku__context_setasstart"
+        android:title="@string/astarku__context_setasstart"/>
+    <item
+        android:id="@+id/astarku__context_setasend"
+        android:title="@string/astarku__context_setasend"/>
+    <item
+        android:id="@+id/astarku__context_setasobstacle"
+        android:title="@string/astarku__context_setasobstacle"/>
+
+</menu>

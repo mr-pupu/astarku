@@ -11,10 +11,7 @@ public class SchemaGenerator {
 		Schema schema = new Schema(1, "id.ac.itats.skripsi.orm");
 		addGraph(schema);
 		addLocation(schema);
-
-		
 	
-		
 		new DaoGenerator().generateAll(schema, "../SchemaGenerator-5.1/src-gen");
 	}
 

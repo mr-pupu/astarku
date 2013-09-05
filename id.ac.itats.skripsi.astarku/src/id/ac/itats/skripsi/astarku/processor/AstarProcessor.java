@@ -23,6 +23,12 @@ public class AstarProcessor extends AsyncTask<Double, Integer, List<Vertex>>{
 	}
 	
 	@Override
+	protected void onPreExecute() {
+		processListener.onPreprocess();
+		super.onPreExecute();
+	}
+	
+	@Override
 	protected List<Vertex> doInBackground(Double... params) {
 		
 		Vertex source = MapMatchingUtil.doMatching(graph.getVerticeValues(), params[0], params[1]);

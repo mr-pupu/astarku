@@ -3,11 +3,17 @@
 
     <string name="app_name">Astarku</string>
 
-    <!-- service -->
-    <string name="astar__graphservice_started">GraphService start build graph</string>
-     <string name="astar__graphservice_finish">Graph finish builded</string>
-     <string name="astar__graphservice_running">GraphService running</string>
+    <!-- messagemessage -->
+    <string name="astarku__userlocation_disable">User location currently disable !</string>
     
+    <!-- service -->
+    <string name="astarku__graphservice_started">GraphService start build graph</string>
+    <string name="astarku__graphservice_finish">Graph finish builded</string>
+    <string name="astarku__graphservice_running">GraphService running</string>
+    
+     <!-- shortestpath -->
+    <string name="astarku__shortestPathRunning">Calculation still in progress...</string>
+    <string name="astarku__graph_isnull">Graph not yet ready...</string>
     
     <!-- activity -->
     <string name="title_activity_main">Home</string>
@@ -18,9 +24,16 @@
     <string name="action_help">Help</string>
     <string name="action_about">About</string>
     <string name="action_mylocation">Location</string>
-    <string name="action_option">Location</string>
-    <string name="action_panic">Panic</string>
+    <string name="action_option">Option</string>
+    <string name="action_reroute">Reroute</string>
+    <string name="action_routing">Routing</string>
+    <string name="action_panic">PANIC!</string>
 
+    <!-- contextcontext -->
+    <string name="astarku__context_setasstart">Set as Start</string>
+    <string name="astarku__context_setasend">Set as End</string>
+    <string name="astarku__context_setasobstacle">Set as Obstacle</string>
+    
     <!-- listnavigation item -->
     <string name="list_navigation_home">Home</string>
     <string name="list_navigation_search">Search</string>

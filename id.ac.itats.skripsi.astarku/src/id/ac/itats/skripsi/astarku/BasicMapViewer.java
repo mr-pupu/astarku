@@ -1,9 +1,11 @@
 package id.ac.itats.skripsi.astarku;
 
 import id.ac.itats.skripsi.astarku.processor.AstarProcessor;
+import id.ac.itats.skripsi.astarku.processor.MapMatchingUtil;
 import id.ac.itats.skripsi.astarku.processor.ProcessListener;
 import id.ac.itats.skripsi.astarku.processor.Reporter;
 import id.ac.itats.skripsi.databuilder.GraphAdapter;
+import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
 import id.ac.itats.skripsi.util.MapviewUtils;
 
@@ -33,6 +35,7 @@ import org.mapsforge.map.model.common.PreferencesFacade;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -40,15 +43,13 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Window;
 
-public class BasicMapViewer extends SherlockActivity implements ProcessListener{
-	protected final String TAG = BasicMapViewer.class.getSimpleName();
-	
-	
+public class BasicMapViewer extends SherlockActivity implements ProcessListener {
+	private final String TAG = BasicMapViewer.class.getSimpleName();
+		
 	// Mapview
 	protected String mapFile = "surabaya_new.map";
 
@@ -59,83 +60,106 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 	protected GestureDetector gestureDetector;
 	protected LayerManager layerManager;
 	protected volatile boolean shortestPathRunning = false;
-	protected LatLong start, end;
+	protected LatLong start, end, touchLatLon;
+	protected Marker startMarker, endMarker;
+	protected Polyline polyline; 
 	protected List<Layer> layersOverlay = new ArrayList<Layer>();
+	protected List<LatLong> obstacleList = new ArrayList<LatLong>();
 
-	
 	// Process
+	protected volatile Graph graph;
 	protected Reporter reporter;
 	protected AstarProcessor astarProcessor;
-	
+
 	protected SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
 
 		@Override
 		public boolean onSingleTapConfirmed(android.view.MotionEvent motionEvent) {
 
-			MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
-			LatLong geoPoint = mapPosition.getMapPosition().latLong;		
-			
+			graph = GraphAdapter.getGraph() != null ? GraphAdapter.getGraph() : null;
+
+			if (graph == null) {
+				AppUtil.logUser(BasicMapViewer.this, getString(R.string.astarku__graph_isnull));
+				return false;
+			}
+
 			if (shortestPathRunning) {
-				logUser("Calculation still in progress");
+				AppUtil.logUser(BasicMapViewer.this,getString(R.string.astarku__shortestPathRunning));
 				return false;
 			}
 
-			if (GraphAdapter.getGraph() == null) {
-				logUser("Graph not yet ready!");
-				return false;
-			}
-
-			float x = motionEvent.getX();
-			float y = motionEvent.getY();
-
-			double pixelX = MercatorProjection.longitudeToPixelX(geoPoint.longitude, mapPosition.getZoomLevel());
-			double pixelY = MercatorProjection.latitudeToPixelY(geoPoint.latitude, mapPosition.getZoomLevel());
-
-			pixelX -= mapView.getWidth() >> 1;
-			pixelY -= mapView.getHeight() >> 1;
-
-			LatLong tmpPoint = new LatLong(MercatorProjection.pixelYToLatitude(pixelY + y, mapPosition.getZoomLevel()),
-					MercatorProjection.pixelXToLongitude(pixelX + x, mapPosition.getZoomLevel()));
+			LatLong tmpPoint = getTouchLatLon(motionEvent);
+			
 			if (start != null && end == null) {
 				setEnd(tmpPoint);
 
 				processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
 			} else {
+				cleanLayerOverlay();
+				obstacleList.clear();
 				setStart(tmpPoint);
 			}
 
 			return true;
+		}
+		
+		public void onLongPress(MotionEvent motionEvent) {
+			touchLatLon = getTouchLatLon(motionEvent);
+			openContextMenu(mapView);
 		}
 	};
 
 	protected void setStart(LatLong start) {
 		this.start = start;
 		end = null;
+//		mapView.getModel().mapViewPosition.setCenter(start);
+		
+		startMarker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_start, start);
 
-		for (Layer layer : layersOverlay) {
-			layerManager.getLayers().remove(layer);
-		}
-
-		Marker marker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_start, start);
-		layersOverlay.add(marker);
-
-		if (marker != null) {
-			layerManager.getLayers().add(marker);
-			layerManager.redrawLayers();
+		if (startMarker != null) {
+			layersOverlay.add(startMarker);
+			layerManager.getLayers().add(startMarker);
+			layerManager.redrawLayers();			
 		}
 	}
 
+	protected void cleanLayerOverlay(){
+		for (Layer layer : layersOverlay) {
+			layerManager.getLayers().remove(layer);
+		}
+		layersOverlay.clear();
+	}
 	protected void setEnd(LatLong end) {
 		this.end = end;
 		shortestPathRunning = true;
 
-		Marker marker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_end, end);
-		layersOverlay.add(marker);
-		if (marker != null) {
-			layerManager.getLayers().add(marker);
+		endMarker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_end, end);
+		
+		if (endMarker != null) {
+			layersOverlay.add(endMarker);
+			layerManager.getLayers().add(endMarker);
 			layerManager.redrawLayers();
 		}
 
+	}
+	
+	protected LatLong getTouchLatLon(MotionEvent motionEvent){
+		MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
+		LatLong geoPoint = mapPosition.getMapPosition().latLong;
+		
+		float x = motionEvent.getX();
+		float y = motionEvent.getY();
+
+		double pixelX = MercatorProjection.longitudeToPixelX(geoPoint.longitude, mapPosition.getZoomLevel());
+		double pixelY = MercatorProjection.latitudeToPixelY(geoPoint.latitude, mapPosition.getZoomLevel());
+
+		pixelX -= mapView.getWidth() >> 1;
+		pixelY -= mapView.getHeight() >> 1;
+
+		LatLong latLon = new LatLong(MercatorProjection.pixelYToLatitude(pixelY + y, mapPosition.getZoomLevel()),
+				MercatorProjection.pixelXToLongitude(pixelX + x, mapPosition.getZoomLevel()));
+		
+		return latLon;
 	}
 
 	protected void addLayers(LayerManager layerManager, TileCache tileCache, MapViewPosition mapViewPosition) {
@@ -171,6 +195,11 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 				if (gestureDetector.onTouchEvent(motionEvent)) {
 					return true;
 				}
+				
+				if (!(motionEvent.getAction() == MotionEvent.ACTION_MOVE)) {
+					gestureDetector.setIsLongpressEnabled(true);
+				}
+				
 				return super.onTouchEvent(motionEvent);
 			}
 		};
@@ -183,7 +212,8 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 	protected void init() {
 
 		this.mapView = getMapView();
-
+		registerForContextMenu(mapView);
+		
 		layerManager = mapView.getLayerManager();
 
 		gestureDetector = new GestureDetector(this, gestureListener);
@@ -214,31 +244,10 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 		return mapViewPosition;
 	}
 
-	protected void addMarker(MotionEvent motionEvent) {
-		Marker marker = null;
-		MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
-		LatLong geoPoint = mapPosition.getMapPosition().latLong;
-
-		float x = motionEvent.getX();
-		float y = motionEvent.getY();
-
-		double pixelX = MercatorProjection.longitudeToPixelX(geoPoint.longitude, mapPosition.getZoomLevel());
-		double pixelY = MercatorProjection.latitudeToPixelY(geoPoint.latitude, mapPosition.getZoomLevel());
-
-		pixelX -= mapView.getWidth() >> 1;
-		pixelY -= mapView.getHeight() >> 1;
-
-		LatLong latLong = new LatLong(MercatorProjection.pixelYToLatitude(pixelY + y, mapPosition.getZoomLevel()),
-				MercatorProjection.pixelXToLongitude(pixelX + x, mapPosition.getZoomLevel()));
-		marker = MapviewUtils.createMarker(this, R.drawable.marker_red, latLong);
-		this.mapView.getLayerManager().getLayers().add(marker);
-		this.mapView.getLayerManager().redrawLayers();
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		Intent service = new Intent(BasicMapViewer.this, GraphService.class);
 		startService(service);
 
@@ -271,24 +280,46 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 	protected void setContentView() {
 		setContentView(this.mapView);
 	}
+	
 
-	// TODO ROUTING		
-	protected void processAstar(double fromLat, double fromLon, double toLat, double toLon){
-		reporter = new Reporter();
+
+	// TODO ROUTING
+	protected void processAstar(double fromLat, double fromLon, double toLat, double toLon) {
+		if (reporter == null) {
+			reporter = new Reporter();
+		}		
 		astarProcessor = new AstarProcessor(this, reporter);
 		setSupportProgressBarVisibility(true);
 		if (progress == 100) {
-            progress = 0;
-            progressRunner.run();
-        }
+			progress = 0;
+			progressRunner.run();
+		}
 		astarProcessor.execute(fromLat, fromLon, toLat, toLon);
+	}
+
+	@Override
+	public void onPreprocess() {
+		if(obstacleList.size()>0){	
+			new AsyncTask<Void, Void, Void>() {
+
+				@Override
+				protected Void doInBackground(Void... params) {
+					for(LatLong latLong : obstacleList){
+						reporter.addObstacle(MapMatchingUtil.doMatching(graph.getVerticeValues(), latLong.latitude,
+								latLong.longitude));
+					}
+					return null;
+				}
+			};
+			
+		}		
 	}
 	
 	@Override
-	public void onProcessComplete() {
+	public void onProcessComplete() {				
 		try {
 			List<Vertex> result = astarProcessor.get();
-			Polyline polyline = new Polyline(MapviewUtils.createPaint(
+			polyline = new Polyline(MapviewUtils.createPaint(
 					AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE), 7, Style.STROKE),
 					AndroidGraphicFactory.INSTANCE);
 			List<LatLong> latLongs = polyline.getLatLongs();
@@ -296,46 +327,38 @@ public class BasicMapViewer extends SherlockActivity implements ProcessListener{
 			for (Vertex vertex : result) {
 				latLongs.add(new LatLong(Double.parseDouble(vertex.lat), Double.parseDouble(vertex.lon)));
 			}
-
-			layerManager.getLayers().add(polyline);
-			layerManager.redrawLayers();
-
 			layersOverlay.add(polyline);
-			
-		}catch (InterruptedException e) {
+			layerManager.getLayers().add(polyline);
+			layerManager.redrawLayers();			
+
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-		}finally{
-			logUser(reporter.getReport());
+		} finally {
+			AppUtil.logUser(this,reporter.getReport());
+			shortestPathRunning = false;
+			reporter = null;
+			astarProcessor = null;
+					
 		}
 	}
-	
+
+	//FIXME move to reporter
 	private int progress = 100;
 	private Handler handler = new Handler();
 	private Runnable progressRunner = new Runnable() {
-        @Override
-        public void run() {
-            progress += 1;
+		@Override
+		public void run() {
+			progress += 1;
 
-            int p = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * progress;
-            setSupportProgress(p);
+			int p = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * progress;
+			setSupportProgress(p);
 
-            if (reporter.isFinish() == false) {
-                handler.postDelayed(progressRunner, 300);
-            }
-        }
-    };
-    
-
-    //UTIL
-	protected void logUser(String str) {
-		Toast.makeText(this, str, Toast.LENGTH_LONG).show();
-	}
-
-	protected void log(String str) {
-		Log.i(TAG, str);
-	}
-
+			if (progress < 100) {
+				handler.postDelayed(progressRunner, 200);
+			}
+		}
+	};
 
 }

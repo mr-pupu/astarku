@@ -31,6 +31,12 @@ public class AStar2 {
 			graph.clearTree();		
 		}
 		
+		if(reporter.getObstacleList()!=null){
+			for (Vertex obstacle : reporter.getObstacleList()){
+				obstacle.isObstacle=true;
+			}
+		}
+		
 		reporter.process(process);
 		tLat = Double.valueOf(target.lat);
 		tLon = Double.valueOf(target.lon);

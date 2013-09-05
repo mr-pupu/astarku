@@ -821,7 +821,7 @@ containing a value of this type.
         public static final int activity_vertical_margin=0x7f080010;
     }
     public static final class drawable {
-        public static final int ab_bg_black=0x7f02007e;
+        public static final int ab_bg_black=0x7f020080;
         public static final int abs__ab_bottom_solid_dark_holo=0x7f020000;
         public static final int abs__ab_bottom_solid_inverse_holo=0x7f020001;
         public static final int abs__ab_bottom_solid_light_holo=0x7f020002;
@@ -935,19 +935,21 @@ containing a value of this type.
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
         public static final int abs__toast_frame=0x7f02006f;
         public static final int balloon_overlay_unfocused=0x7f020070;
-        public static final int ic_action_panic=0x7f020071;
-        public static final int ic_compose=0x7f020072;
-        public static final int ic_launcher=0x7f020073;
-        public static final int ic_marker_end=0x7f020074;
-        public static final int ic_marker_start=0x7f020075;
-        public static final int ic_menu_mylocation=0x7f020076;
-        public static final int ic_menu_myplaces=0x7f020077;
-        public static final int ic_refresh=0x7f020078;
-        public static final int ic_search=0x7f020079;
-        public static final int marker_green=0x7f02007a;
-        public static final int marker_red=0x7f02007b;
-        public static final int person=0x7f02007c;
-        public static final int stat_sample=0x7f02007d;
+        public static final int ic_action_reroute=0x7f020071;
+        public static final int ic_action_routing=0x7f020072;
+        public static final int ic_compose=0x7f020073;
+        public static final int ic_launcher=0x7f020074;
+        public static final int ic_marker_end=0x7f020075;
+        public static final int ic_marker_start=0x7f020076;
+        public static final int ic_menu_mylocation=0x7f020077;
+        public static final int ic_menu_myplaces=0x7f020078;
+        public static final int ic_obstacle=0x7f020079;
+        public static final int ic_refresh=0x7f02007a;
+        public static final int ic_search=0x7f02007b;
+        public static final int marker_green=0x7f02007c;
+        public static final int marker_red=0x7f02007d;
+        public static final int person=0x7f02007e;
+        public static final int stat_sample=0x7f02007f;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050020;
@@ -989,12 +991,17 @@ containing a value of this type.
         public static final int abs__textButton=0x7f050013;
         public static final int abs__title=0x7f05001b;
         public static final int abs__up=0x7f05000b;
-        public static final int action_about=0x7f05003a;
-        public static final int action_help=0x7f050039;
-        public static final int action_mylocation=0x7f050036;
-        public static final int action_option=0x7f050037;
-        public static final int action_panic=0x7f050035;
-        public static final int action_preferences=0x7f050038;
+        public static final int action_about=0x7f05003e;
+        public static final int action_help=0x7f05003d;
+        public static final int action_mylocation=0x7f05003b;
+        public static final int action_option=0x7f05003f;
+        public static final int action_panic=0x7f05003a;
+        public static final int action_preferences=0x7f05003c;
+        public static final int action_reroute=0x7f050039;
+        public static final int action_routing=0x7f050038;
+        public static final int astarku__context_setasend=0x7f050036;
+        public static final int astarku__context_setasobstacle=0x7f050037;
+        public static final int astarku__context_setasstart=0x7f050035;
         public static final int attribution=0x7f050034;
         public static final int disableHome=0x7f050009;
         public static final int edit_query=0x7f050026;
@@ -1041,8 +1048,9 @@ containing a value of this type.
         public static final int sherlock_spinner_item=0x7f030018;
     }
     public static final class menu {
-        public static final int main_menu=0x7f0d0000;
-        public static final int preferences_menu=0x7f0d0001;
+        public static final int main_contextmenu=0x7f0d0000;
+        public static final int main_menu=0x7f0d0001;
+        public static final int preferences_menu=0x7f0d0002;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1084,38 +1092,52 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
-        public static final int action_about=0x7f0a0015;
-        public static final int action_help=0x7f0a0014;
-        public static final int action_mylocation=0x7f0a0016;
-        public static final int action_option=0x7f0a0017;
-        public static final int action_panic=0x7f0a0018;
+        public static final int action_about=0x7f0a0018;
+        public static final int action_help=0x7f0a0017;
+        public static final int action_mylocation=0x7f0a0019;
+        public static final int action_option=0x7f0a001a;
+        public static final int action_panic=0x7f0a001d;
         /**  actionaction 
          */
-        public static final int action_preferences=0x7f0a0013;
+        public static final int action_preferences=0x7f0a0016;
+        public static final int action_reroute=0x7f0a001b;
+        public static final int action_routing=0x7f0a001c;
         public static final int app_name=0x7f0a000d;
-        public static final int astar__graphservice_finish=0x7f0a000f;
-        public static final int astar__graphservice_running=0x7f0a0010;
+        public static final int astarku__context_setasend=0x7f0a001f;
+        public static final int astarku__context_setasobstacle=0x7f0a0020;
+        /**  contextcontext 
+         */
+        public static final int astarku__context_setasstart=0x7f0a001e;
+        public static final int astarku__graph_isnull=0x7f0a0013;
+        public static final int astarku__graphservice_finish=0x7f0a0010;
+        public static final int astarku__graphservice_running=0x7f0a0011;
         /**  service 
          */
-        public static final int astar__graphservice_started=0x7f0a000e;
-        public static final int key_preferences_locationsnap=0x7f0a0020;
-        public static final int key_preferences_locationupdate=0x7f0a001d;
-        public static final int list_navigation_history=0x7f0a001b;
+        public static final int astarku__graphservice_started=0x7f0a000f;
+        /**  shortestpath 
+         */
+        public static final int astarku__shortestPathRunning=0x7f0a0012;
+        /**  messagemessage 
+         */
+        public static final int astarku__userlocation_disable=0x7f0a000e;
+        public static final int key_preferences_locationsnap=0x7f0a0028;
+        public static final int key_preferences_locationupdate=0x7f0a0025;
+        public static final int list_navigation_history=0x7f0a0023;
         /**  listnavigation item 
          */
-        public static final int list_navigation_home=0x7f0a0019;
-        public static final int list_navigation_search=0x7f0a001a;
+        public static final int list_navigation_home=0x7f0a0021;
+        public static final int list_navigation_search=0x7f0a0022;
         /**  preferences 
          */
-        public static final int preferences_locationupdate=0x7f0a001c;
-        public static final int summary_preferences_locationsnap=0x7f0a0022;
-        public static final int summary_preferences_locationupdate=0x7f0a001f;
+        public static final int preferences_locationupdate=0x7f0a0024;
+        public static final int summary_preferences_locationsnap=0x7f0a002a;
+        public static final int summary_preferences_locationupdate=0x7f0a0027;
         /**  activity 
          */
-        public static final int title_activity_main=0x7f0a0011;
-        public static final int title_activity_preferences=0x7f0a0012;
-        public static final int title_preferences_locationsnap=0x7f0a0021;
-        public static final int title_preferences_locationupdate=0x7f0a001e;
+        public static final int title_activity_main=0x7f0a0014;
+        public static final int title_activity_preferences=0x7f0a0015;
+        public static final int title_preferences_locationsnap=0x7f0a0029;
+        public static final int title_preferences_locationupdate=0x7f0a0026;
     }
     public static final class style {
         /** 

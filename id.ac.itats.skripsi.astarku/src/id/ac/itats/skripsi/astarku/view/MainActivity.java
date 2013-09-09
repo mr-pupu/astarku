@@ -147,6 +147,8 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 
 		case R.id.action_mylocation:
 			if (super.myLocationOverlay.isMyLocationEnabled()) {
+				cleanLayerOverlay();
+				obstacleList.clear();
 				super.setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
 				super.myLocationOverlay.requestRedraw();
 			} else {

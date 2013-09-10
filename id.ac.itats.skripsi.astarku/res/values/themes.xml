@@ -4,6 +4,8 @@
     <style name="Theme.Styled" parent="Theme.Sherlock">
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+   
+        
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="@style/Widget.Sherlock.ActionBar">
@@ -11,6 +13,8 @@
         <item name="android:background">@drawable/ab_bg_black</item>
         <item name="backgroundSplit">@drawable/ab_bg_black</item>
         <item name="android:backgroundSplit">@drawable/ab_bg_black</item>
+       
+ 
     </style>
 
 </resources>

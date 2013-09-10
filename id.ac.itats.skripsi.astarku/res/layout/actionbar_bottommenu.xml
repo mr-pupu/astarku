@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom|right"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/add_item"
+        style="@style/Widget.Sherlock.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/abs__ic_menu_moreoverflow_holo_dark"
+        android:title="@string/action_option" />
+
+</LinearLayout>

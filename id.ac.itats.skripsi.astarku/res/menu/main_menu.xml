@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+    
     <item
         android:id="@+id/action_routing"
         android:icon="@drawable/ic_action_routing"
@@ -15,7 +15,6 @@
         android:id="@+id/action_panic"
         android:showAsAction="always"
         android:title="@string/action_panic"/>
-    
     <item
         android:id="@+id/action_mylocation"
         android:icon="@drawable/ic_menu_myplaces"

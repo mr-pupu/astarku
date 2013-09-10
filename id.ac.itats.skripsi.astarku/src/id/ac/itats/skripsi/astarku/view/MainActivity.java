@@ -14,6 +14,7 @@ import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.model.MapViewPosition;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +31,11 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
+import com.actionbarsherlock.widget.SearchView;
 
 public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigationListener {
 	private final String TAG = MainActivity.class.getSimpleName();
-
+	private SearchView searchView;
 	private static final int RESULT_SETTINGS = 1;
 	private SharedPreferences sharedPrefs;
 	private String[] mLocations;
@@ -121,7 +123,8 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			break;
 		// search
 		case 1:
-			AppUtil.logUser(this, mLocations[itemPosition]);
+			// onSearchRequested();
+
 			break;
 		// history
 		case 2:
@@ -144,7 +147,6 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-
 		case R.id.action_mylocation:
 			if (super.myLocationOverlay.isMyLocationEnabled()) {
 				cleanLayerOverlay();
@@ -156,11 +158,11 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 				AppUtil.logUser(this, getString(R.string.astarku__userlocation_disable));
 			}
 			break;
-			
+
 		case R.id.action_reroute:
 			layerManager.getLayers().remove(polyline);
 			processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
-			
+
 			break;
 
 		case R.id.action_panic:
@@ -174,7 +176,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 
 		case R.id.action_help:
 			AppUtil.logUser(this, "" + item.getTitle());
-						
+
 			break;
 
 		case R.id.action_about:
@@ -217,7 +219,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			mapView.getLayerManager().getLayers().add(marker);
 			mapView.getLayerManager().redrawLayers();
 			layersOverlay.add(marker);
-			
+
 			break;
 
 		default:
@@ -227,24 +229,52 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 	}
 
 	protected void initDecoration() {
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		requestWindowFeature(Window.FEATURE_PROGRESS);
 
-		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
-		getSupportActionBar().setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
+
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
 		setSupportProgressBarVisibility(false);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(false);
+//		actionBar.setDisplayShowHomeEnabled(true);
 
 		mLocations = getResources().getStringArray(R.array.locations);
-		Context context = getSupportActionBar().getThemedContext();
+		Context context = actionBar.getThemedContext();
 		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.locations,
 				R.layout.sherlock_spinner_item);
 		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		getSupportActionBar().setListNavigationCallbacks(list, this);
-	}
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		actionBar.setListNavigationCallbacks(list, this);
 
+		actionBar.setCustomView(R.layout.actionbar_search);
+		View actionBarCustomView = actionBar.getCustomView();
+		searchView = ((SearchView) actionBarCustomView.findViewById(R.id.search_view));
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		searchView.setOnSearchClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+			}
+		});
+
+		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+
+			@Override
+			public boolean onClose() {
+				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+				return false;
+			}
+		});
+	
+
+	}
 
 	private void panic() {
 		if (super.reporter == null) {
@@ -266,4 +296,14 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		MapViewPosition mapPosition = super.mapView.getModel().mapViewPosition;
 		mapPosition.setZoomLevel((byte) zoomLevel);
 	}
+
+	@Override
+	public void onBackPressed() {
+
+		if (searchView.getVisibility() == View.VISIBLE) {
+			searchView.setIconified(true);
+			return;
+		}
+	}
+
 }

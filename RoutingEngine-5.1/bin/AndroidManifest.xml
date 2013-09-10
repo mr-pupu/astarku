@@ -22,7 +22,11 @@
         <activity
             android:name="id.ac.itats.skripsi.routingengine.limasatu.BasicMapViewer"
             android:label="@string/app_name" >
-            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name="id.ac.itats.skripsi.routingengine.limasatu.GraphService" >
@@ -31,13 +35,35 @@
         <activity
             android:name="id.ac.itats.skripsi.routingengine.limasatu.TestActivity"
             android:label="@string/title_activity_test" >
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Enabling Search Dialog -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="id.ac.itats.skripsi.routingengine.limasatu.SearchActivity" />
         </activity>
+
+        <!-- A Searchable activity, that handles the searches -->
+        <activity android:name="id.ac.itats.skripsi.routingengine.limasatu.SearchActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <!-- Activity that shows the country details -->
+        <activity android:name="id.ac.itats.skripsi.routingengine.limasatu.PlaceActivity" />
+        
+         <!-- Content Provider to query sqlite database -->
+        <provider
+            android:name="id.ac.itats.skripsi.search.PlaceContentProvider"
+            android:authorities="id.ac.itats.skripsi.search.PlaceContentProvider"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import id.ac.itats.skripsi.orm.Node;
 import id.ac.itats.skripsi.orm.NodeDao;
 import id.ac.itats.skripsi.orm.Way;
 import id.ac.itats.skripsi.orm.WayDao;
+import id.ac.itats.skripsi.routingengine.limasatu.RoutingEngine;
 import id.ac.itats.skripsi.shortestpath.model.Edge;
 import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
@@ -14,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GraphAdapter {
-	protected static final String TAG = "GraphAdapter";
-	private static DaoSession daoSession = DataBaseHelper.getInstance().openSession();
+	
+	private static DaoSession daoSession = DataBaseHelper.getInstance(RoutingEngine.getAppContext()).openSession();
 	private static NodeDao nodeDao = daoSession.getNodeDao();
 	private static WayDao wayDao = daoSession.getWayDao();
 

@@ -22,17 +22,6 @@
     </EditText>
 
     <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:layout_marginTop="24dp"
-        android:onClick="runShortestpath"
-        android:text="AStar" />
-
-    <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,5 +29,24 @@
         android:layout_toRightOf="@+id/editText1"
         android:onClick="addObstacle"
         android:text="Add" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/button2"
+        android:layout_toLeftOf="@+id/button2"
+        android:text="Search" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="26dp"
+        android:layout_toLeftOf="@+id/button2"
+        android:onClick="runShortestpath"
+        android:text="AStar" />
 
 </RelativeLayout>

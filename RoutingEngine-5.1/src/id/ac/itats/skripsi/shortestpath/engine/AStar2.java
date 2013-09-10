@@ -15,7 +15,7 @@ public class AStar2 {
 	private double tLon;
 	private Graph graph;
 
-	private List<Vertex> obstaclesVertex;
+	private List<Vertex> obstaclesVertex = new ArrayList<Vertex>();
 	
 	public AStar2(Graph graph) {
 		this.graph = graph;

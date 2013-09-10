@@ -1,6 +1,5 @@
 package id.ac.itats.skripsi.databuilder;
 
-import id.ac.itats.skripsi.astarku.RoutingEngine;
 import id.ac.itats.skripsi.orm.DaoMaster;
 import id.ac.itats.skripsi.orm.DaoMaster.DevOpenHelper;
 import id.ac.itats.skripsi.orm.DaoSession;
@@ -17,29 +16,34 @@ import android.util.Log;
 
 public class DataBaseHelper {
 
-	private static String TAG = "DataBaseHelper";
+	private String TAG = "DataBaseHelper";
 	private static DataBaseHelper instance;
-	private static String DB_NAME = "astardb";
-	private static String DB_PATH = "";
-	private static SQLiteDatabase dataBase;
-	private Context context = RoutingEngine.getAppContext();
 
-	private static DevOpenHelper openHelper;
+	private SQLiteDatabase dataBase;
+	private String DB_NAME = "astardb";
+	private String DB_PATH = "";
+
+	private Context context;
+
+	private DevOpenHelper openHelper;
 	private DaoMaster daoMaster;
 
-	private DataBaseHelper() {
+	private DataBaseHelper(Context context) {
+		this.context = context;
 		prepareConnection();
 	}
 
-	public static synchronized DataBaseHelper getInstance() {
+	public static synchronized DataBaseHelper getInstance(Context context) {
 		if (instance == null) {
-			instance = new DataBaseHelper();
+			instance = new DataBaseHelper(context);
 		}
 		return instance;
 	}
 
 	private void prepareConnection() {
 		// prepareDatabase
+
+
 		DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
 
 		openHelper = new DevOpenHelper(context, DB_NAME, null);
@@ -61,8 +65,8 @@ public class DataBaseHelper {
 		dataBase = openHelper.getReadableDatabase();
 		daoMaster = new DaoMaster(dataBase);
 	}
-	
-	private void copyDatabase() throws IOException{
+
+	private void copyDatabase() throws IOException {
 		InputStream mInput = context.getAssets().open(DB_NAME);
 		String outFileName = DB_PATH + DB_NAME;
 		OutputStream mOutput = new FileOutputStream(outFileName);
@@ -85,7 +89,11 @@ public class DataBaseHelper {
 		return daoMaster.newSession();
 	}
 
-	public static void closeSession() {
+	public SQLiteDatabase getDataBase() {
+		return dataBase;
+	}
+	
+	public void closeSession() {
 		if (dataBase != null)
 			dataBase.close();
 		openHelper.close();

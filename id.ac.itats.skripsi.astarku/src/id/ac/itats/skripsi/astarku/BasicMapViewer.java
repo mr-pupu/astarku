@@ -45,9 +45,10 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Window;
 
-public class BasicMapViewer extends SherlockActivity implements ProcessListener {
+public class BasicMapViewer extends SherlockFragmentActivity implements ProcessListener {
 	private final String TAG = BasicMapViewer.class.getSimpleName();
 		
 	// Mapview

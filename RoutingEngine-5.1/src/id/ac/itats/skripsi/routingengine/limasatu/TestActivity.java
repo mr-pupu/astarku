@@ -21,6 +21,7 @@ public class TestActivity extends Activity {
 	EditText editText;
 	List<Vertex> obstaclesVertex;
 	Button btnAdd;
+	Button btnSearch;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +29,18 @@ public class TestActivity extends Activity {
 		setContentView(R.layout.activity_test);
 		editText = (EditText) findViewById(R.id.editText1);
 		btnAdd = (Button) findViewById(R.id.button2);
+		btnSearch = (Button) findViewById(R.id.button3);
+		btnSearch.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onSearchRequested();
+				
+			}
+		});
 		
-		Intent in = new Intent(this, GraphService.class);
-		startService(in);
+//		Intent in = new Intent(this, GraphService.class);
+//		startService(in);
 		
 	}
 	

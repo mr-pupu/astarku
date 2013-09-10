@@ -1,5 +1,6 @@
 package id.ac.itats.skripsi.databuilder;
 
+import id.ac.itats.skripsi.astarku.RoutingEngine;
 import id.ac.itats.skripsi.orm.DaoSession;
 import id.ac.itats.skripsi.orm.Node;
 import id.ac.itats.skripsi.orm.NodeDao;
@@ -14,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GraphAdapter {
-	protected static final String TAG = "GraphAdapter";
-	private static DaoSession daoSession = DataBaseHelper.getInstance().openSession();
+	
+	private static DaoSession daoSession = DataBaseHelper.getInstance(RoutingEngine.getAppContext()).openSession();
 	private static NodeDao nodeDao = daoSession.getNodeDao();
 	private static WayDao wayDao = daoSession.getWayDao();
 

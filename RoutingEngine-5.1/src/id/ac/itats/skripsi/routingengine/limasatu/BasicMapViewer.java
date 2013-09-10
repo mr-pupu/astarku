@@ -39,8 +39,9 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class BasicMapViewer extends SherlockActivity {
+public class BasicMapViewer extends SherlockFragmentActivity {
 	protected final String TAG = BasicMapViewer.class.getSimpleName();
 	protected MapView mapView;
 	protected PreferencesFacade preferencesFacade;
@@ -111,6 +112,7 @@ public class BasicMapViewer extends SherlockActivity {
 
 				Marker marker = Utils.createMarker(BasicMapViewer.this,
 						R.drawable.marker_green, start);
+				
 				layersOverlay.add(marker);
 
 				if (marker != null) {

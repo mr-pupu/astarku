@@ -5,16 +5,16 @@
 
     <!-- messagemessage -->
     <string name="astarku__userlocation_disable">User location currently disable !</string>
-    
+
     <!-- service -->
     <string name="astarku__graphservice_started">GraphService start build graph</string>
     <string name="astarku__graphservice_finish">Graph finish builded</string>
     <string name="astarku__graphservice_running">GraphService running</string>
-    
-     <!-- shortestpath -->
+
+    <!-- shortestpath -->
     <string name="astarku__shortestPathRunning">Calculation still in progress...</string>
     <string name="astarku__graph_isnull">Graph not yet ready...</string>
-    
+
     <!-- activity -->
     <string name="title_activity_main">Home</string>
     <string name="title_activity_preferences">Preferences</string>
@@ -33,7 +33,7 @@
     <string name="astarku__context_setasstart">Set as Start</string>
     <string name="astarku__context_setasend">Set as End</string>
     <string name="astarku__context_setasobstacle">Set as Obstacle</string>
-    
+
     <!-- listnavigation item -->
     <string name="list_navigation_home">Home</string>
     <string name="list_navigation_search">Search</string>
@@ -44,9 +44,11 @@
     <string name="key_preferences_locationupdate">key_preferences_locationupdate</string>
     <string name="title_preferences_locationupdate">Enable Update Location</string>
     <string name="summary_preferences_locationupdate">If enable, astarku always track your location</string>
-
     <string name="key_preferences_locationsnap">key_preferences_locationsnap</string>
     <string name="title_preferences_locationsnap">Enable Snap to Location</string>
     <string name="summary_preferences_locationsnap">If enable, astarku always snap location on mapview</string>
-</resources>
+    <string name="search">Search Place</string>
+    <string name="search_hint">Search Place</string>
+    <string name="search_settings">Search Place Names</string>
 
+</resources>

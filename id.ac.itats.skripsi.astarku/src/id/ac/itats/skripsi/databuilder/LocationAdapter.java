@@ -5,7 +5,6 @@ import id.ac.itats.skripsi.orm.PlaceDao;
 import java.util.HashMap;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -13,33 +12,24 @@ import android.database.sqlite.SQLiteQueryBuilder;
 public class LocationAdapter {
 	protected final String TAG = "LocationAdapter";
 
-//	private LocationDataBaseHelper dbHelper;
-
 	private SQLiteDatabase database;
 	
 	private static final String PLACE_ID = PlaceDao.Properties.PlaceID.columnName;
 	private static final String PLACE_NAME = PlaceDao.Properties.Name.columnName;
 	private static final String PLACE_TABLE_NAME = PlaceDao.TABLENAME;
 
-	private HashMap<String, String> mAliasMap;
+	private HashMap<String, String> aliasMap;
 
 	public LocationAdapter(SQLiteDatabase database) {
 		this.database = database;
-//		dbHelper = new LocationDataBaseHelper(context);
-//		try {
-//			dbHelper.createDataBase();
-//			dbHelper.openDataBase();
-//		} catch (Exception e) {
-//			System.out.println(e.toString());
-//		}
 
-		mAliasMap = new HashMap<String, String>();
+		aliasMap = new HashMap<String, String>();
 
-		mAliasMap.put("_ID", PLACE_ID + " as " + "_id");
+		aliasMap.put("_ID", PLACE_ID + " as " + "_id");
 
-		mAliasMap.put(SearchManager.SUGGEST_COLUMN_TEXT_1, PLACE_NAME + " as " + SearchManager.SUGGEST_COLUMN_TEXT_1);
+		aliasMap.put(SearchManager.SUGGEST_COLUMN_TEXT_1, PLACE_NAME + " as " + SearchManager.SUGGEST_COLUMN_TEXT_1);
 
-		mAliasMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, PLACE_ID + " as "
+		aliasMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, PLACE_ID + " as "
 				+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
 	}
 
@@ -51,7 +41,7 @@ public class LocationAdapter {
 		}
 
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setProjectionMap(mAliasMap);
+		queryBuilder.setProjectionMap(aliasMap);
 		queryBuilder.setTables(PLACE_TABLE_NAME);
 
 		Cursor c = queryBuilder.query(database, new String[] { "_ID", SearchManager.SUGGEST_COLUMN_TEXT_1,

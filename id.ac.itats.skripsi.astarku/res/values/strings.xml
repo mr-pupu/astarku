@@ -27,6 +27,8 @@
     <string name="action_option">Option</string>
     <string name="action_reroute">Reroute</string>
     <string name="action_routing">Routing</string>
+    <string name="action_routing_details">Routing Details</string>
+    <string name="action_routing_algoritma">Algoritma Execution</string>
     <string name="action_panic">PANIC!</string>
 
     <!-- contextcontext -->
@@ -50,5 +52,8 @@
     <string name="search">Search Place</string>
     <string name="search_hint">Search Place</string>
     <string name="search_settings">Search Place Names</string>
+    <string name="title_activity_route_details">RouteDetailsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -17,13 +17,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.SearchView;
 
 public class SearchActivity extends SherlockFragmentActivity implements LoaderCallbacks<Cursor>{
 
-	ListView mLVCountries;
+	ListView lvPlace;
 	SimpleCursorAdapter mCursorAdapter;
 	
 	@Override
@@ -32,16 +29,16 @@ public class SearchActivity extends SherlockFragmentActivity implements LoaderCa
 		setTheme(R.style.Theme_Styled);
 		setContentView(R.layout.activity_searchable);
 		
-		mLVCountries = (ListView) findViewById(R.id.lv_countries);
+		lvPlace = (ListView) findViewById(R.id.lv_places);
 		
-		mLVCountries.setOnItemClickListener(new OnItemClickListener() {
+		lvPlace.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent placeIntent = new Intent(getApplicationContext(), PlaceActivity.class);
 				
 				Uri data = Uri.withAppendedPath(PlaceContentProvider.CONTENT_URI, String.valueOf(id));
-				
+				System.out.println(id);
 				placeIntent.setData(data);
 				
 				startActivity(placeIntent);
@@ -56,7 +53,7 @@ public class SearchActivity extends SherlockFragmentActivity implements LoaderCa
 				new String[] {SearchManager.SUGGEST_COLUMN_TEXT_1},
 				new int[]{android.R.id.text1},0);
 		
-		mLVCountries.setAdapter(mCursorAdapter);
+		lvPlace.setAdapter(mCursorAdapter);
 		
 		Intent intent = getIntent();
 		

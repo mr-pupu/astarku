@@ -4,6 +4,8 @@ import id.ac.itats.skripsi.astarku.RoutingEngine;
 import id.ac.itats.skripsi.orm.DaoSession;
 import id.ac.itats.skripsi.orm.Node;
 import id.ac.itats.skripsi.orm.NodeDao;
+import id.ac.itats.skripsi.orm.Road;
+import id.ac.itats.skripsi.orm.RoadDao;
 import id.ac.itats.skripsi.orm.Way;
 import id.ac.itats.skripsi.orm.WayDao;
 import id.ac.itats.skripsi.shortestpath.model.Edge;
@@ -19,7 +21,9 @@ public class GraphAdapter {
 	private static DaoSession daoSession = DataBaseHelper.getInstance(RoutingEngine.getAppContext()).openSession();
 	private static NodeDao nodeDao = daoSession.getNodeDao();
 	private static WayDao wayDao = daoSession.getWayDao();
-
+	
+	private static RoadDao roadDao = daoSession.getRoadDao();
+	
 	private static List<Edge> edges = new ArrayList<Edge>();
 	private static HashMap<Long, Vertex> vertices = new HashMap<Long, Vertex>();
 	public static Graph graph;
@@ -29,6 +33,11 @@ public class GraphAdapter {
 				.where(NodeDao.Properties.NodeID.eq(nodeId)).list().get(0);
 	}
 
+	public static String getRoadName(String roadID){
+		Road road = roadDao.queryBuilder().where(RoadDao.Properties.RoadID.eq(roadID)).list().get(0);
+		return road.getName();
+		
+	}
 	public static void buildGraph() {
 		String wayId = WayDao.Properties.Id.columnName;
 		// int rowCount = mDb.rawQuery("SELECT "+ wayId +" FROM WAY",

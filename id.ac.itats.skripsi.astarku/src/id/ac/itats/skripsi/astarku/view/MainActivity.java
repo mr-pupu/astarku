@@ -5,9 +5,11 @@ import id.ac.itats.skripsi.astarku.BasicMapViewer;
 import id.ac.itats.skripsi.astarku.R;
 import id.ac.itats.skripsi.astarku.processor.MapMatchingUtil;
 import id.ac.itats.skripsi.astarku.processor.Reporter;
+import id.ac.itats.skripsi.databuilder.PlaceContentProvider;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
 import id.ac.itats.skripsi.util.MapviewUtils;
 
+import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.LayerManager;
 import org.mapsforge.map.layer.cache.TileCache;
@@ -18,9 +20,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MotionEvent;
@@ -33,12 +40,14 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.actionbarsherlock.widget.SearchView;
 
-public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigationListener {
+public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigationListener, LoaderCallbacks<Cursor> {
 	private final String TAG = MainActivity.class.getSimpleName();
 	private SearchView searchView;
 	private static final int RESULT_SETTINGS = 1;
 	private SharedPreferences sharedPrefs;
 	private String[] mLocations;
+	private Marker marker = null;
+	private Uri mUri;
 
 	@Override
 	protected MapView getMapView() {
@@ -53,7 +62,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 
 					return true;
 				}
-				if (!(motionEvent.getAction() == MotionEvent.ACTION_MOVE)) {
+				if ((motionEvent.getAction() != MotionEvent.ACTION_MOVE)) {
 					gestureDetector.setIsLongpressEnabled(true);
 				}
 				return false;
@@ -79,6 +88,33 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		super.myLocationOverlay.disableMyLocation();
 
+	}
+
+	private void handleIntent(Intent intent) {
+		if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
+			doSearch(intent.getStringExtra(SearchManager.QUERY));
+		} else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+			mUri = intent.getData();
+			if (marker != null) {
+				layerManager.getLayers().remove(marker);
+			}
+			getSupportLoaderManager().restartLoader(0, null, this);
+		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIntent(intent);
+	}
+
+	private void doSearch(String query) {
+		Bundle data = new Bundle();
+		data.putString("query", query);
+
+		// Invoking onCreateLoader() in non-ui thread
+		getSupportLoaderManager().restartLoader(1, data, this);
 	}
 
 	@Override
@@ -160,11 +196,21 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			break;
 
 		case R.id.action_reroute:
-			layerManager.getLayers().remove(polyline);
+			if (polyline != null) {
+				layerManager.getLayers().remove(polyline);
+			}
 			processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
 
 			break;
 
+		case R.id.action_routing_details:
+			AppUtil.logUser(this, "" + item.getTitle());
+			startActivity(new Intent(MainActivity.this,FragmentLayoutSupport.class));
+			break;
+		case R.id.action_routing_algorithm:
+			AppUtil.logUser(this, "" + item.getTitle());
+			
+			break;
 		case R.id.action_panic:
 			panic();
 			break;
@@ -202,12 +248,21 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		switch (item.getItemId()) {
 		case R.id.astarku__context_setasstart:
 			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
-			setStart(super.touchLatLon);
+
+			if (marker != null) {
+				setStart(marker.getLatLong());
+			} else {
+				setStart(super.touchLatLon);
+			}
 			break;
 
 		case R.id.astarku__context_setasend:
 			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
-			setEnd(super.touchLatLon);
+			if (marker != null) {
+				setEnd(marker.getLatLong());
+			} else {
+				setEnd(super.touchLatLon);
+			}
 			break;
 
 		case R.id.astarku__context_setasobstacle:
@@ -215,10 +270,14 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			obstacleList.add(super.touchLatLon);
 			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
 
-			Marker marker = MapviewUtils.createMarker(this, R.drawable.ic_obstacle, super.touchLatLon);
-			mapView.getLayerManager().getLayers().add(marker);
+			LatLong latlong = super.touchLatLon;
+			if (marker != null) {
+				latlong = marker.getLatLong();
+			}
+			Marker obstacle = MapviewUtils.createMarker(this, R.drawable.ic_obstacle, latlong);
+			mapView.getLayerManager().getLayers().add(obstacle);
 			mapView.getLayerManager().redrawLayers();
-			layersOverlay.add(marker);
+			layersOverlay.add(obstacle);
 
 			break;
 
@@ -238,10 +297,10 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
 		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.ab_bg_black));
 
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 		setSupportProgressBarVisibility(false);
 		actionBar.setDisplayShowTitleEnabled(false);
-//		actionBar.setDisplayShowHomeEnabled(true);
+		// actionBar.setDisplayShowHomeEnabled(true);
 
 		mLocations = getResources().getStringArray(R.array.locations);
 		Context context = actionBar.getThemedContext();
@@ -272,7 +331,6 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 				return false;
 			}
 		});
-	
 
 	}
 
@@ -304,6 +362,35 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			searchView.setIconified(true);
 			return;
 		}
+	}
+
+	// XXX searchresult
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle data) {
+		CursorLoader cursorLoader = null;
+		if (arg0 == 0) {
+			cursorLoader = new CursorLoader(getBaseContext(), mUri, null, null, null, null);
+		} else if (arg0 == 1) {
+			cursorLoader = new CursorLoader(getBaseContext(), PlaceContentProvider.CONTENT_URI, null, null,
+					new String[] { data.getString("query") }, null);
+		}
+		return cursorLoader;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+		if (c.moveToFirst()) {
+
+			System.out.println("LatLon: " + c.getString(c.getColumnIndex(c.getColumnName(3))));
+			String[] latlon = c.getString(c.getColumnIndex(c.getColumnName(3))).split(",");
+			marker = addMarker(new LatLong(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1])));
+
+		}
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+
 	}
 
 }

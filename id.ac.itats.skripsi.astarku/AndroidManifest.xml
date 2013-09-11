@@ -26,16 +26,23 @@
         <activity
             android:name="id.ac.itats.skripsi.astarku.view.MainActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="id.ac.itats.skripsi.astarku.view.SearchActivity" />
+                android:value=".MainActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="id.ac.itats.skripsi.astarku.view.PreferencesActivity"
@@ -45,6 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="id.ac.itats.skripsi.astarku.view.MainActivity" />
         </activity>
+        <!--
         <activity android:name="id.ac.itats.skripsi.astarku.view.SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -54,7 +62,16 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        -->
         <activity android:name="id.ac.itats.skripsi.astarku.view.PlaceActivity" />
+        <activity
+            android:name="id.ac.itats.skripsi.astarku.view.FragmentLayoutSupport"
+            android:label="@string/title_activity_route_details" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name="id.ac.itats.skripsi.astarku.view.FragmentLayoutSupport$DetailsActivity" />
 
         <service android:name="id.ac.itats.skripsi.astarku.GraphService" />
 
@@ -62,6 +79,14 @@
             android:name="id.ac.itats.skripsi.databuilder.PlaceContentProvider"
             android:authorities="id.ac.itats.skripsi.databuilder.PlaceContentProvider"
             android:exported="true" />
+
+        <activity
+            android:name="id.ac.itats.skripsi.astarku.view.RouteDetailsActivity"
+            android:label="@string/title_activity_route_details" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="id.ac.itats.skripsi.astarku.view.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

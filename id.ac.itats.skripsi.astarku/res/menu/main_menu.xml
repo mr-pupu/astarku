@@ -5,7 +5,17 @@
         android:id="@+id/action_routing"
         android:icon="@drawable/ic_action_routing"
         android:showAsAction="always"
-        android:title="@string/action_routing"/>
+        android:title="@string/action_routing">
+        
+        <menu >
+            <item android:id="@+id/action_routing_details"
+                android:showAsAction="always"
+                android:title="@string/action_routing_details"/>
+            <item android:id="@+id/action_routing_algorithm"
+                android:showAsAction="always"
+                android:title="@string/action_routing_algoritma"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_reroute"
         android:icon="@drawable/ic_action_reroute"

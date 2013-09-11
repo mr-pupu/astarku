@@ -75,11 +75,13 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RoadPlaceDao.class);
     }
     
-    public DaoSession newSession() {
+    @Override
+	public DaoSession newSession() {
         return new DaoSession(db, IdentityScopeType.Session, daoConfigMap);
     }
     
-    public DaoSession newSession(IdentityScopeType type) {
+    @Override
+	public DaoSession newSession(IdentityScopeType type) {
         return new DaoSession(db, type, daoConfigMap);
     }
     

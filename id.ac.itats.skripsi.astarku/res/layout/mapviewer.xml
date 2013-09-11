@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/mainView" android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:id="@+id/mainView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="right" >
+
 	<org.mapsforge.map.android.view.MapView android:id="@+id/mapView"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 	<TextView android:id="@+id/attribution" android:layout_width="fill_parent"
@@ -14,4 +18,5 @@
 		android:layout_height="10dip"
 		android:layout_marginLeft="5dip" 
 		android:visibility="visible"/>
+
 </RelativeLayout>

@@ -5,6 +5,7 @@ import id.ac.itats.skripsi.astarku.processor.MapMatchingUtil;
 import id.ac.itats.skripsi.astarku.processor.ProcessListener;
 import id.ac.itats.skripsi.astarku.processor.Reporter;
 import id.ac.itats.skripsi.databuilder.GraphAdapter;
+import id.ac.itats.skripsi.shortestpath.engine.AStar2;
 import id.ac.itats.skripsi.shortestpath.model.Graph;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
 import id.ac.itats.skripsi.util.MapviewUtils;
@@ -42,15 +43,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Window;
 
 public class BasicMapViewer extends SherlockFragmentActivity implements ProcessListener {
 	private final String TAG = BasicMapViewer.class.getSimpleName();
-		
+
 	// Mapview
 	protected String mapFile = "surabaya_new.map";
 
@@ -63,7 +64,7 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	protected volatile boolean shortestPathRunning = false;
 	protected LatLong start, end, touchLatLon;
 	protected Marker startMarker, endMarker;
-	protected Polyline polyline; 
+	protected Polyline polyline;
 	protected List<Layer> layersOverlay = new ArrayList<Layer>();
 	protected List<LatLong> obstacleList = new ArrayList<LatLong>();
 
@@ -71,6 +72,7 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	protected volatile Graph graph;
 	protected Reporter reporter;
 	protected AstarProcessor astarProcessor;
+
 
 	protected SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
 
@@ -85,12 +87,12 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 			}
 
 			if (shortestPathRunning) {
-				AppUtil.logUser(BasicMapViewer.this,getString(R.string.astarku__shortestPathRunning));
+				AppUtil.logUser(BasicMapViewer.this, getString(R.string.astarku__shortestPathRunning));
 				return false;
 			}
 
 			LatLong tmpPoint = getTouchLatLon(motionEvent);
-			
+
 			if (start != null && end == null) {
 				setEnd(tmpPoint);
 
@@ -103,7 +105,8 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 
 			return true;
 		}
-		
+
+		@Override
 		public void onLongPress(MotionEvent motionEvent) {
 			touchLatLon = getTouchLatLon(motionEvent);
 			openContextMenu(mapView);
@@ -113,29 +116,30 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	protected void setStart(LatLong start) {
 		this.start = start;
 		end = null;
-//		mapView.getModel().mapViewPosition.setCenter(start);
-		
+		// mapView.getModel().mapViewPosition.setCenter(start);
+
 		startMarker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_start, start);
 
 		if (startMarker != null) {
 			layersOverlay.add(startMarker);
 			layerManager.getLayers().add(startMarker);
-			layerManager.redrawLayers();			
+			layerManager.redrawLayers();
 		}
 	}
 
-	protected void cleanLayerOverlay(){
+	protected void cleanLayerOverlay() {
 		for (Layer layer : layersOverlay) {
 			layerManager.getLayers().remove(layer);
 		}
 		layersOverlay.clear();
 	}
+
 	protected void setEnd(LatLong end) {
 		this.end = end;
 		shortestPathRunning = true;
 
 		endMarker = MapviewUtils.createMarker(BasicMapViewer.this, R.drawable.ic_marker_end, end);
-		
+
 		if (endMarker != null) {
 			layersOverlay.add(endMarker);
 			layerManager.getLayers().add(endMarker);
@@ -143,11 +147,11 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 		}
 
 	}
-	
-	protected LatLong getTouchLatLon(MotionEvent motionEvent){
+
+	protected LatLong getTouchLatLon(MotionEvent motionEvent) {
 		MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
 		LatLong geoPoint = mapPosition.getMapPosition().latLong;
-		
+
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
@@ -159,7 +163,7 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 
 		LatLong latLon = new LatLong(MercatorProjection.pixelYToLatitude(pixelY + y, mapPosition.getZoomLevel()),
 				MercatorProjection.pixelXToLongitude(pixelX + x, mapPosition.getZoomLevel()));
-		
+
 		return latLon;
 	}
 
@@ -196,11 +200,11 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 				if (gestureDetector.onTouchEvent(motionEvent)) {
 					return true;
 				}
-				
+
 				if (!(motionEvent.getAction() == MotionEvent.ACTION_MOVE)) {
 					gestureDetector.setIsLongpressEnabled(true);
 				}
-				
+
 				return super.onTouchEvent(motionEvent);
 			}
 		};
@@ -211,10 +215,10 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	}
 
 	protected void init() {
-
+		
 		this.mapView = getMapView();
 		registerForContextMenu(mapView);
-		
+
 		layerManager = mapView.getLayerManager();
 
 		gestureDetector = new GestureDetector(this, gestureListener);
@@ -226,6 +230,8 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 		MapViewPosition mapViewPosition = this.initializePosition(this.mapView.getModel().mapViewPosition);
 
 		addLayers(this.mapView.getLayerManager(), this.tileCache, mapViewPosition);
+
+
 		setContentView();
 
 	}
@@ -276,19 +282,23 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	public void onResume() {
 		super.onResume();
 		this.myLocationOverlay.enableMyLocation(true);
+		
+		if(GraphAdapter.getGraph()==null){
+			Intent service = new Intent(BasicMapViewer.this, GraphService.class);
+			startService(service);
+			
+		}
 	}
 
 	protected void setContentView() {
 		setContentView(this.mapView);
 	}
-	
-
 
 	// TODO ROUTING
 	protected void processAstar(double fromLat, double fromLon, double toLat, double toLon) {
 		if (reporter == null) {
 			reporter = new Reporter();
-		}		
+		}
 		astarProcessor = new AstarProcessor(this, reporter);
 		setSupportProgressBarVisibility(true);
 		if (progress == 100) {
@@ -300,29 +310,28 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 
 	@Override
 	public void onPreprocess() {
-		if(obstacleList.size()>0){	
+		if (obstacleList.size() > 0) {
 			new AsyncTask<Void, Void, Void>() {
 
 				@Override
 				protected Void doInBackground(Void... params) {
-					for(LatLong latLong : obstacleList){
+					for (LatLong latLong : obstacleList) {
 						reporter.addObstacle(MapMatchingUtil.doMatching(graph.getVerticeValues(), latLong.latitude,
 								latLong.longitude));
 					}
 					return null;
 				}
 			};
-			
-		}		
+
+		}
 	}
-	
+
 	@Override
-	public void onProcessComplete() {				
+	public void onProcessComplete() {
 		try {
 			List<Vertex> result = astarProcessor.get();
-			polyline = new Polyline(MapviewUtils.createPaint(
-					AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE), 7, Style.STROKE),
-					AndroidGraphicFactory.INSTANCE);
+			polyline = new Polyline(MapviewUtils.createPaint(AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE), 7,
+					Style.STROKE), AndroidGraphicFactory.INSTANCE);
 			List<LatLong> latLongs = polyline.getLatLongs();
 
 			for (Vertex vertex : result) {
@@ -330,22 +339,33 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 			}
 			layersOverlay.add(polyline);
 			layerManager.getLayers().add(polyline);
-			layerManager.redrawLayers();			
-
+			layerManager.redrawLayers();
+			
+			String[] details = AStar2.printPath(result);
+			for(int i = 1;i<result.size();i++){
+				String temp[] = details[i].split(",");
+				
+				String roadName = GraphAdapter.getRoadName(temp[0]);
+				
+				System.out.println(roadName + " || "+ temp[1] + " m");
+			}
+			
+			System.out.println("TOTAL : "+details[result.size()] + " km");
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		} finally {
-			AppUtil.logUser(this,reporter.getReport());
+			AppUtil.logUser(this, reporter.getReport());
 			shortestPathRunning = false;
 			reporter = null;
 			astarProcessor = null;
-					
+
 		}
 	}
 
-	//FIXME move to reporter
+	// FIXME move to reporter
 	private int progress = 100;
 	private Handler handler = new Handler();
 	private Runnable progressRunner = new Runnable() {
@@ -353,13 +373,33 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 		public void run() {
 			progress += 1;
 
-			int p = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * progress;
+			int p = (android.view.Window.PROGRESS_END - android.view.Window.PROGRESS_START) / 100 * progress;
 			setSupportProgress(p);
 
 			if (progress < 100) {
-				handler.postDelayed(progressRunner, 200);
+				handler.postDelayed(progressRunner, 300);
 			}
 		}
 	};
+
+	protected Marker addMarker(LatLong latLong) {
+		
+		TextView bubbleView = new TextView(this);
+		MapviewUtils.setBackground(bubbleView, getResources().getDrawable(R.drawable.balloon_overlay_unfocused));
+		bubbleView.setGravity(Gravity.CENTER);
+		bubbleView.setMaxEms(20);
+		bubbleView.setTextSize(15);
+		bubbleView.setTextColor(android.graphics.Color.BLACK);
+		bubbleView.setText(latLong.toString());
+		Bitmap bitmap = MapviewUtils.viewToBitmap(this, bubbleView);
+		Marker marker = new Marker(latLong, bitmap, 0, -bitmap.getHeight() / 2);
+		MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
+		mapPosition.setCenter(latLong);
+		layerManager.getLayers().add(marker);
+		layersOverlay.add(marker);
+		layerManager.redrawLayers();
+		
+		return marker;
+	}
 
 }

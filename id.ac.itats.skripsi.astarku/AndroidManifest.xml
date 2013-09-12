@@ -62,17 +62,9 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        -->
+        
         <activity android:name="id.ac.itats.skripsi.astarku.view.PlaceActivity" />
-        <activity
-            android:name="id.ac.itats.skripsi.astarku.view.FragmentLayoutSupport"
-            android:label="@string/title_activity_route_details" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity android:name="id.ac.itats.skripsi.astarku.view.FragmentLayoutSupport$DetailsActivity" />
-
+       -->
         <service android:name="id.ac.itats.skripsi.astarku.GraphService" />
 
         <provider

@@ -823,9 +823,11 @@ containing a value of this type.
          */
         public static final int activity_horizontal_margin=0x7f08000f;
         public static final int activity_vertical_margin=0x7f080010;
+        public static final int text_padding=0x7f080011;
     }
     public static final class drawable {
-        public static final int ab_bg_black=0x7f020081;
+        public static final int ab_bg_black=0x7f020088;
+        public static final int ab_bg_blue=0x7f020089;
         public static final int abs__ab_bottom_solid_dark_holo=0x7f020000;
         public static final int abs__ab_bottom_solid_inverse_holo=0x7f020001;
         public static final int abs__ab_bottom_solid_light_holo=0x7f020002;
@@ -955,6 +957,13 @@ containing a value of this type.
         public static final int marker_red=0x7f02007e;
         public static final int person=0x7f02007f;
         public static final int stat_sample=0x7f020080;
+        public static final int turn_left_25_white=0x7f020081;
+        public static final int turn_left_45_white=0x7f020082;
+        public static final int turn_left_90_white=0x7f020083;
+        public static final int turn_right_25_white=0x7f020084;
+        public static final int turn_right_45_white=0x7f020085;
+        public static final int turn_right_90_white=0x7f020086;
+        public static final int turn_straight_white=0x7f020087;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050020;
@@ -996,44 +1005,48 @@ containing a value of this type.
         public static final int abs__textButton=0x7f050013;
         public static final int abs__title=0x7f05001b;
         public static final int abs__up=0x7f05000b;
-        public static final int action_about=0x7f05004c;
-        public static final int action_help=0x7f05004b;
-        public static final int action_mylocation=0x7f050049;
-        public static final int action_option=0x7f05004d;
-        public static final int action_panic=0x7f050048;
-        public static final int action_preferences=0x7f05004a;
-        public static final int action_reroute=0x7f050047;
-        public static final int action_routing=0x7f050044;
-        public static final int action_routing_algorithm=0x7f050046;
-        public static final int action_routing_details=0x7f050045;
-        public static final int action_settings=0x7f05004e;
+        public static final int action_about=0x7f050050;
+        public static final int action_help=0x7f05004f;
+        public static final int action_mylocation=0x7f05004d;
+        public static final int action_option=0x7f050051;
+        public static final int action_panic=0x7f05004c;
+        public static final int action_preferences=0x7f05004e;
+        public static final int action_reroute=0x7f05004b;
+        public static final int action_routing=0x7f050048;
+        public static final int action_routing_clearOverlay=0x7f05004a;
+        public static final int action_routing_details=0x7f050049;
+        public static final int action_settings=0x7f050052;
         public static final int add_item=0x7f050032;
-        public static final int astarku__context_setasend=0x7f050042;
-        public static final int astarku__context_setasobstacle=0x7f050043;
-        public static final int astarku__context_setasstart=0x7f050041;
-        public static final int attribution=0x7f050040;
+        public static final int astarku__context_setasend=0x7f050046;
+        public static final int astarku__context_setasobstacle=0x7f050047;
+        public static final int astarku__context_setasstart=0x7f050045;
+        public static final int attribution=0x7f050044;
         public static final int button1=0x7f050039;
-        public static final int details=0x7f05003d;
         public static final int disableHome=0x7f050009;
         public static final int edit_query=0x7f050026;
         public static final int homeAsUp=0x7f050006;
+        public static final int layout=0x7f05003e;
         public static final int linearLayout1=0x7f050034;
         public static final int listMode=0x7f050002;
-        public static final int listView1=0x7f05003a;
-        public static final int lv_places=0x7f05003b;
-        public static final int mainView=0x7f05003e;
-        public static final int mapView=0x7f05003f;
+        public static final int lvRouteDetails=0x7f05003c;
+        public static final int lv_places=0x7f05003d;
+        public static final int mainView=0x7f050042;
+        public static final int mapView=0x7f050043;
         public static final int normal=0x7f050001;
         public static final int search_view=0x7f050033;
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
         public static final int tabMode=0x7f050003;
-        public static final int titles=0x7f05003c;
+        public static final int total=0x7f05003a;
         public static final int tv_address=0x7f050036;
         public static final int tv_category=0x7f050037;
         public static final int tv_latlon=0x7f050038;
         public static final int tv_name=0x7f050035;
+        public static final int tv_pathlenght=0x7f050041;
+        public static final int tv_pathname=0x7f050040;
+        public static final int tv_pathstep=0x7f05003f;
+        public static final int tv_route_total=0x7f05003b;
         public static final int useLogo=0x7f050004;
         public static final int wrap_content=0x7f050000;
     }
@@ -1067,12 +1080,11 @@ containing a value of this type.
         public static final int activity_place=0x7f030017;
         public static final int activity_route_details=0x7f030018;
         public static final int activity_searchable=0x7f030019;
-        public static final int fragment_layout_support=0x7f03001a;
+        public static final int list_item=0x7f03001a;
         public static final int mapviewer=0x7f03001b;
         public static final int preferences=0x7f03001c;
         public static final int sherlock_spinner_dropdown_item=0x7f03001d;
         public static final int sherlock_spinner_item=0x7f03001e;
-        public static final int simple_list_item_checkable_1=0x7f03001f;
     }
     public static final class menu {
         public static final int main_contextmenu=0x7f0d0000;
@@ -1120,60 +1132,67 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
-        public static final int action_about=0x7f0a0018;
-        public static final int action_help=0x7f0a0017;
-        public static final int action_mylocation=0x7f0a0019;
-        public static final int action_option=0x7f0a001a;
-        public static final int action_panic=0x7f0a001f;
+        public static final int action_about=0x7f0a0019;
+        public static final int action_help=0x7f0a0018;
+        public static final int action_mylocation=0x7f0a001a;
+        public static final int action_option=0x7f0a001b;
+        public static final int action_panic=0x7f0a0021;
         /**  actionaction 
          */
-        public static final int action_preferences=0x7f0a0016;
-        public static final int action_reroute=0x7f0a001b;
-        public static final int action_routing=0x7f0a001c;
-        public static final int action_routing_algoritma=0x7f0a001e;
-        public static final int action_routing_details=0x7f0a001d;
-        public static final int action_settings=0x7f0a0031;
+        public static final int action_preferences=0x7f0a0017;
+        public static final int action_reroute=0x7f0a001c;
+        public static final int action_routing=0x7f0a001d;
+        public static final int action_routing_algoritma=0x7f0a001f;
+        public static final int action_routing_clearOverlay=0x7f0a0020;
+        public static final int action_routing_details=0x7f0a001e;
+        public static final int action_settings=0x7f0a0033;
         public static final int app_name=0x7f0a000d;
-        public static final int astarku__context_setasend=0x7f0a0021;
-        public static final int astarku__context_setasobstacle=0x7f0a0022;
+        public static final int astarku__context_setasend=0x7f0a0023;
+        public static final int astarku__context_setasobstacle=0x7f0a0024;
         /**  contextcontext 
          */
-        public static final int astarku__context_setasstart=0x7f0a0020;
+        public static final int astarku__context_setasstart=0x7f0a0022;
         public static final int astarku__graph_isnull=0x7f0a0013;
         public static final int astarku__graphservice_finish=0x7f0a0010;
         public static final int astarku__graphservice_running=0x7f0a0011;
         /**  service 
          */
         public static final int astarku__graphservice_started=0x7f0a000f;
+        public static final int astarku__path_isnull=0x7f0a0014;
         /**  shortestpath 
          */
         public static final int astarku__shortestPathRunning=0x7f0a0012;
         /**  messagemessage 
          */
         public static final int astarku__userlocation_disable=0x7f0a000e;
-        public static final int hello_world=0x7f0a0032;
-        public static final int key_preferences_locationsnap=0x7f0a002a;
-        public static final int key_preferences_locationupdate=0x7f0a0027;
-        public static final int list_navigation_history=0x7f0a0025;
+        public static final int hello_world=0x7f0a0034;
+        public static final int key_preferences_demo=0x7f0a0038;
+        public static final int key_preferences_locationsnap=0x7f0a002c;
+        public static final int key_preferences_locationupdate=0x7f0a0029;
+        public static final int label_total=0x7f0a0036;
+        public static final int list_navigation_history=0x7f0a0027;
         /**  listnavigation item 
          */
-        public static final int list_navigation_home=0x7f0a0023;
-        public static final int list_navigation_search=0x7f0a0024;
+        public static final int list_navigation_home=0x7f0a0025;
+        public static final int list_navigation_search=0x7f0a0026;
+        public static final int preferences_demo=0x7f0a0037;
         /**  preferences 
          */
-        public static final int preferences_locationupdate=0x7f0a0026;
-        public static final int search=0x7f0a002d;
-        public static final int search_hint=0x7f0a002e;
-        public static final int search_settings=0x7f0a002f;
-        public static final int summary_preferences_locationsnap=0x7f0a002c;
-        public static final int summary_preferences_locationupdate=0x7f0a0029;
+        public static final int preferences_locationupdate=0x7f0a0028;
+        public static final int search=0x7f0a002f;
+        public static final int search_hint=0x7f0a0030;
+        public static final int search_settings=0x7f0a0031;
+        public static final int summary_preferences_demo=0x7f0a0039;
+        public static final int summary_preferences_locationsnap=0x7f0a002e;
+        public static final int summary_preferences_locationupdate=0x7f0a002b;
         /**  activity 
          */
-        public static final int title_activity_main=0x7f0a0014;
-        public static final int title_activity_preferences=0x7f0a0015;
-        public static final int title_activity_route_details=0x7f0a0030;
-        public static final int title_preferences_locationsnap=0x7f0a002b;
-        public static final int title_preferences_locationupdate=0x7f0a0028;
+        public static final int title_activity_main=0x7f0a0015;
+        public static final int title_activity_preferences=0x7f0a0016;
+        public static final int title_activity_route_details=0x7f0a0032;
+        public static final int title_preferences_locationsnap=0x7f0a002d;
+        public static final int title_preferences_locationupdate=0x7f0a002a;
+        public static final int turn_left=0x7f0a0035;
     }
     public static final class style {
         /** 

@@ -1,57 +1,103 @@
 package id.ac.itats.skripsi.shortestpath.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import org.mapsforge.core.model.LatLong;
+public class Path implements Parcelable {
+	private String pathId;
+	private int pathStep;
+	private String pathName;
+	private String pathLenght;
+	private int turnImage;
 
-public class Path {
-	
-	public static class PathItem {
-		public final String content;
-		public final String id;
-		public final LatLong location;
-		public final String text;
+	public Path(String pathId, int pathStep, String pathName, String pathLenght) {
+		super();
+		this.pathId = pathId;
+		this.pathStep = pathStep;
+		this.pathName = pathName;
+		this.pathLenght = pathLenght;
+	}
 
-		public PathItem(String id, String content, LatLong location, String text) {
-			this.id = id;
-			this.content = content;
-			this.location = location;
-			this.text = text;
+	public String getPathId() {
+		return pathId;
+	}
+
+	public void setPathId(String pathId) {
+		this.pathId = pathId;
+	}
+
+	public int getPathStep() {
+		return pathStep;
+	}
+
+	public void setPathStep(int pathStep) {
+		this.pathStep = pathStep;
+	}
+
+	public String getPathName() {
+		return pathName;
+	}
+
+	public void setPathName(String pathName) {
+		this.pathName = pathName;
+	}
+
+	public String getPathLenght() {
+		return pathLenght;
+	}
+
+	public void setPathLenght(String pathLenght) {
+		this.pathLenght = pathLenght;
+	}
+
+	public int getTurnImage() {
+		return turnImage;
+	}
+
+	public void setTurnImage(int turnImage) {
+		this.turnImage = turnImage;
+	}
+
+	@Override
+	public String toString() {
+		return "Path [pathId=" + pathId + ", pathName=" + pathName + ", pathLenght=" + pathLenght + "]";
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(pathId);
+		dest.writeInt(pathStep);
+		dest.writeString(pathName);
+		dest.writeString(pathLenght);
+		dest.writeInt(turnImage);
+
+	}
+
+	public static final Parcelable.Creator<Path> CREATOR = new Parcelable.Creator<Path>() {
+
+		@Override
+		public Path createFromParcel(Parcel in) {
+			return new Path(in);
 		}
 
 		@Override
-		public String toString() {
-			return this.content;
+		public Path[] newArray(int size) {
+			return new Path[size];
 		}
-	}
 
-	/**
-	 * A map of sample (dummy) items, by ID.
-	 */
-	public static final Map<String, PathItem> ITEM_MAP = new HashMap<String, PathItem>();
+	};
 
-	/**
-	 * An array of sample (dummy) items.
-	 */
-	public static final List<PathItem> ITEMS = new ArrayList<PathItem>();
-
-	static {
-		addItem(new PathItem("1", "Brandenburger Tor", new LatLong(52.516, 13.378),
-				"This is the famous Brandenburger Tor"));
-		addItem(new PathItem("2", "Checkpoint Charlie", new LatLong(52.507, 13.390),
-				"This used to be the famous Checkpoint Charlie"));
-		addItem(new PathItem(
-				"3",
-				"Savigny Platz",
-				new LatLong(52.505, 13.322),
-				"This is a square in Berlin with a longer text that does not really say anything at all and you would see more of the map if this useless text was not here."));
-	}
-
-	private static void addItem(PathItem item) {
-		ITEMS.add(item);
-		ITEM_MAP.put(item.id, item);
+	private Path(Parcel in) {
+		pathId = in.readString();
+		pathStep = in.readInt();
+		pathName = in.readString();
+		pathLenght = in.readString();
+		turnImage = in.readInt();
 	}
 }

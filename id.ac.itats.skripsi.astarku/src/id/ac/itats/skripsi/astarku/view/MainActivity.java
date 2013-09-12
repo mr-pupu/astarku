@@ -5,6 +5,7 @@ import id.ac.itats.skripsi.astarku.BasicMapViewer;
 import id.ac.itats.skripsi.astarku.R;
 import id.ac.itats.skripsi.astarku.processor.MapMatchingUtil;
 import id.ac.itats.skripsi.astarku.processor.Reporter;
+import id.ac.itats.skripsi.databuilder.GraphAdapter;
 import id.ac.itats.skripsi.databuilder.PlaceContentProvider;
 import id.ac.itats.skripsi.shortestpath.model.Vertex;
 import id.ac.itats.skripsi.util.MapviewUtils;
@@ -46,7 +47,6 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 	private static final int RESULT_SETTINGS = 1;
 	private SharedPreferences sharedPrefs;
 	private String[] mLocations;
-	private Marker marker = null;
 	private Uri mUri;
 
 	@Override
@@ -59,7 +59,9 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			@Override
 			public boolean onTouch(View v, MotionEvent motionEvent) {
 				if (gestureDetector.onTouchEvent(motionEvent)) {
-
+					if(((motionEvent.getAction() == MotionEvent.ACTION_MOVE))){
+						return false;
+					}
 					return true;
 				}
 				if ((motionEvent.getAction() != MotionEvent.ACTION_MOVE)) {
@@ -86,7 +88,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		super.onCreate(savedInstanceState);
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		super.myLocationOverlay.disableMyLocation();
+		myLocationOverlay.disableMyLocation();
 
 	}
 
@@ -95,8 +97,8 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			doSearch(intent.getStringExtra(SearchManager.QUERY));
 		} else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
 			mUri = intent.getData();
-			if (marker != null) {
-				layerManager.getLayers().remove(marker);
+			if (bubleMarker != null) {
+				layerManager.getLayers().remove(bubleMarker);
 			}
 			getSupportLoaderManager().restartLoader(0, null, this);
 		}
@@ -128,20 +130,23 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			System.out.println(isLocationUpdate);
 
 			if (isLocationUpdate == true) {
-				super.myLocationOverlay.enableMyLocation(true);
+				myLocationOverlay.enableMyLocation(true);
 
 				AppUtil.log(TAG, "" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
-				super.myLocationOverlay.requestRedraw();
+				myLocationOverlay.requestRedraw();
 
 			}
 			if (isLocationUpdate == false) {
 				AppUtil.log(TAG, "" + super.myLocationOverlay.isMyLocationEnabled() + " - " + isLocationUpdate);
-				super.myLocationOverlay.disableMyLocation();
-				super.myLocationOverlay.requestRedraw();
+				myLocationOverlay.disableMyLocation();
+				myLocationOverlay.requestRedraw();
 			}
 
 			boolean isLocationSnap = sharedPrefs.getBoolean(getString(R.string.key_preferences_locationsnap), false);
-			super.myLocationOverlay.setSnapToLocationEnabled(isLocationSnap);
+			myLocationOverlay.setSnapToLocationEnabled(isLocationSnap);
+			
+			isDemoEnable= sharedPrefs.getBoolean(getString(R.string.key_preferences_demo), false);
+			
 
 			break;
 
@@ -196,21 +201,38 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			break;
 
 		case R.id.action_reroute:
+			if (bubleMarker != null) {
+				layerManager.getLayers().remove(bubleMarker);
+			}
 			if (polyline != null) {
 				layerManager.getLayers().remove(polyline);
 			}
-			processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
-
+			
+			if (GraphAdapter.getGraph() != null) {
+				processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
+			} else {
+				AppUtil.logUser(this, getString(R.string.astarku__graph_isnull));
+			}
 			break;
 
 		case R.id.action_routing_details:
-			AppUtil.logUser(this, "" + item.getTitle());
-			startActivity(new Intent(MainActivity.this,FragmentLayoutSupport.class));
+
+			if (pathItems != null) {
+				Intent intent = new Intent(MainActivity.this, RouteDetailsActivity.class);
+				intent.putExtra("total", total);
+				intent.putParcelableArrayListExtra("pathItems", pathItems);
+				startActivity(intent);
+			} else {
+				AppUtil.logUser(this, "" + R.string.astarku__path_isnull);
+			}
 			break;
-		case R.id.action_routing_algorithm:
-			AppUtil.logUser(this, "" + item.getTitle());
 			
+		case R.id.action_routing_clearOverlay:
+			AppUtil.logUser(this, "" + item.getTitle());
+			cleanLayerOverlay();
+			bubleMarker=null;
 			break;
+			
 		case R.id.action_panic:
 			panic();
 			break;
@@ -226,7 +248,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			break;
 
 		case R.id.action_about:
-			AppUtil.logUser(this, "" + item.getTitle());
+//			AppUtil.logUser(this, "" + item.getTitle());
 			resetZoomLevel(14);
 			break;
 
@@ -247,38 +269,43 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 	public boolean onContextItemSelected(android.view.MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.astarku__context_setasstart:
-			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
-
-			if (marker != null) {
-				setStart(marker.getLatLong());
+			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);			
+			
+			if (bubleMarker != null) {
+				setStart(bubleMarker.getLatLong());
+				
 			} else {
 				setStart(super.touchLatLon);
 			}
+			
+			bubleMarker=null;
+			
 			break;
 
 		case R.id.astarku__context_setasend:
 			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
-			if (marker != null) {
-				setEnd(marker.getLatLong());
+		
+			if (bubleMarker != null) {
+				setEnd(bubleMarker.getLatLong());
 			} else {
 				setEnd(super.touchLatLon);
 			}
+			bubleMarker=null;			
 			break;
 
 		case R.id.astarku__context_setasobstacle:
-
 			obstacleList.add(super.touchLatLon);
 			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
 
 			LatLong latlong = super.touchLatLon;
-			if (marker != null) {
-				latlong = marker.getLatLong();
+			if (bubleMarker != null) {
+				latlong = bubleMarker.getLatLong();
 			}
 			Marker obstacle = MapviewUtils.createMarker(this, R.drawable.ic_obstacle, latlong);
-			mapView.getLayerManager().getLayers().add(obstacle);
-			mapView.getLayerManager().redrawLayers();
+			layerManager.getLayers().add(obstacle);
+			layerManager.redrawLayers();
 			layersOverlay.add(obstacle);
-
+			bubleMarker=null;
 			break;
 
 		default:
@@ -324,25 +351,27 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		});
 
 		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-
 			@Override
 			public boolean onClose() {
 				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 				return false;
 			}
 		});
+		
+		
 
 	}
 
+	//FIXME
 	private void panic() {
-		if (super.reporter == null) {
-			super.reporter = new Reporter();
+		if (reporter == null) {
+			reporter = new Reporter();
 		}
 		Location myLocation = myLocationOverlay.getLastLocation();
 		Vertex obstacle = MapMatchingUtil.doMatching(super.graph.getVerticeValues(), myLocation.getLatitude(),
 				myLocation.getLongitude());
-		super.reporter.addObstacle(obstacle);
-		super.processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
+		reporter.addObstacle(obstacle);
+		processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
 
 		AppUtil.log(TAG, "reroute");
 		AppUtil.log(TAG, "latlon : " + myLocation.getLatitude() + ", " + myLocation.getLongitude());
@@ -351,7 +380,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 	}
 
 	private void resetZoomLevel(int zoomLevel) {
-		MapViewPosition mapPosition = super.mapView.getModel().mapViewPosition;
+		MapViewPosition mapPosition = mapView.getModel().mapViewPosition;
 		mapPosition.setZoomLevel((byte) zoomLevel);
 	}
 
@@ -383,14 +412,14 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 
 			System.out.println("LatLon: " + c.getString(c.getColumnIndex(c.getColumnName(3))));
 			String[] latlon = c.getString(c.getColumnIndex(c.getColumnName(3))).split(",");
-			marker = addMarker(new LatLong(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1])));
-
+			bubleMarker = addBubleMarker(new LatLong(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1])));
+			
+			searchView.setIconified(true);
 		}
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-
 	}
 
 }

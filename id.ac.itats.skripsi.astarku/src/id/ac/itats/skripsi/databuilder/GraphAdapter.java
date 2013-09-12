@@ -26,7 +26,9 @@ public class GraphAdapter {
 	
 	private static List<Edge> edges = new ArrayList<Edge>();
 	private static HashMap<Long, Vertex> vertices = new HashMap<Long, Vertex>();
-	public static Graph graph;
+	private static Graph graph;
+	private static String builderTime;
+	
 
 	public static Node getNode(long nodeId) {
 		return nodeDao.queryBuilder()
@@ -34,8 +36,13 @@ public class GraphAdapter {
 	}
 
 	public static String getRoadName(String roadID){
-		Road road = roadDao.queryBuilder().where(RoadDao.Properties.RoadID.eq(roadID)).list().get(0);
-		return road.getName();
+		String roadName = "N/A";
+		List<Road> roads = roadDao.queryBuilder().where(RoadDao.Properties.RoadID.eq(roadID)).list();
+		
+		if(roads.size()>0){
+			roadName = roads.get(0).getName();
+		}
+		return roadName;
 		
 	}
 	public static void buildGraph() {
@@ -93,5 +100,15 @@ public class GraphAdapter {
 	public static Graph getGraph() {
 		return graph;
 	}
+
+	public static String getBuilderTime() {
+		return builderTime;
+	}
+
+	public static void setBuilderTime(String builderTime) {
+		GraphAdapter.builderTime = builderTime;
+	}
+	
+	
 	
 }

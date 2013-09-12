@@ -2,6 +2,7 @@
 <resources>
 
     <drawable name="ab_bg_black">#aa000000</drawable>
+    <drawable name="ab_bg_blue">#aa3498db</drawable>
 
     <color name="green_turquoise">#1abc9c</color>
     <color name="green_greensea">#16a085</color>

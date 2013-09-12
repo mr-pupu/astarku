@@ -8,11 +8,14 @@ import android.support.v4.app.NavUtils;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
 public class PreferencesActivity extends SherlockPreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Load partially transparent black background
+       
 		addPreferencesFromResource(R.xml.preferences);
 	}
 

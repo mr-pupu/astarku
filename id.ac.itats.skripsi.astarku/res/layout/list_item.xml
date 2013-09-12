@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <!-- Column 1 -->
+<!--
+    <ImageView
+        android:id="@+id/iv_turn"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:contentDescription="@string/turn_left"
+        android:src="@drawable/turn_left_90_white" /> -->
+        
+    <TextView
+        android:id="@+id/tv_pathstep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="1"
+        android:textSize="16sp" />
+
+    
+    
+    <!-- Column 2 -->
+
+    <TextView
+        android:id="@+id/tv_pathname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="N/A"
+        android:textSize="16sp" />
+
+    <!-- Column 3 -->
+
+    <TextView
+        android:id="@+id/tv_pathlenght"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dip"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="20"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -128,6 +128,29 @@ public class AStar2 {
 			if (prev != null) {
 				for (Edge e : prev.adjacencies) {
 					if (e.target == v) {
+						result[i] = e.id + "," + Double.toString(e.weight).substring(0,2); //m
+
+					}
+				}
+				total = v.minDistance;
+			}
+			prev = v;
+			i++;
+		}
+		result[i] = "" + Double.toString(total/1000).substring(0,3); //km
+		return result;
+	}
+	
+	/*
+	 * 	public static String[] printPath(List<Vertex> path) {
+		String[] result = new String[path.size() + 1];
+		double total = 0;
+		Vertex prev = null;
+		int i = 0;
+		for (Vertex v : path) {
+			if (prev != null) {
+				for (Edge e : prev.adjacencies) {
+					if (e.target == v) {
 						result[i] = e.id + " || " + Math.round(e.weight*1000);
 
 					}
@@ -137,8 +160,9 @@ public class AStar2 {
 			prev = v;
 			i++;
 		}
-		result[i] = "" + LatLongUtil.threeDigits(total);
+		result[i] = "" + threeDigits(total);
 		return result;
 	}
+	 */
 
 }

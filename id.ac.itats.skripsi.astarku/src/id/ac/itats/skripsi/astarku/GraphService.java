@@ -37,6 +37,7 @@ public class GraphService extends Service {
 					time = stopwatch.stop().getSeconds();
 					Log.i(TAG , ""+GraphAdapter.getGraph().getSize());
 					Log.i(TAG , "graph is ready!" + time);
+					GraphAdapter.setBuilderTime(""+time+ " second");
 				
 				} catch (Exception e) {
 					e.printStackTrace();

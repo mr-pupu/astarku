@@ -11,9 +11,14 @@
             <item android:id="@+id/action_routing_details"
                 android:showAsAction="always"
                 android:title="@string/action_routing_details"/>
+            <item android:id="@+id/action_routing_clearOverlay"
+                android:showAsAction="always"
+                android:title="@string/action_routing_clearOverlay"/>
+            <!--  
             <item android:id="@+id/action_routing_algorithm"
                 android:showAsAction="always"
                 android:title="@string/action_routing_algoritma"/>
+                -->
         </menu>
     </item>
     <item

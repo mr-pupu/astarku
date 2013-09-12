@@ -12,5 +12,13 @@
             android:summary="@string/summary_preferences_locationsnap"
             android:title="@string/title_preferences_locationsnap" />
     </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/preferences_demo" >
+        <CheckBoxPreference
+            android:key="@string/key_preferences_demo"
+            android:summary="@string/summary_preferences_demo"
+            android:title="@string/preferences_demo" />
+    
+    </PreferenceCategory>
 
 </PreferenceScreen>

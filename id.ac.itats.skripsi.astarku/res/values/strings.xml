@@ -14,7 +14,8 @@
     <!-- shortestpath -->
     <string name="astarku__shortestPathRunning">Calculation still in progress...</string>
     <string name="astarku__graph_isnull">Graph not yet ready...</string>
-
+	<string name="astarku__path_isnull">Shortestpath Not found!</string>
+	
     <!-- activity -->
     <string name="title_activity_main">Home</string>
     <string name="title_activity_preferences">Preferences</string>
@@ -28,7 +29,8 @@
     <string name="action_reroute">Reroute</string>
     <string name="action_routing">Routing</string>
     <string name="action_routing_details">Routing Details</string>
-    <string name="action_routing_algoritma">Algoritma Execution</string>
+    <string name="action_routing_algoritma">Algoritma Execution Info</string>
+    <string name="action_routing_clearOverlay">Clear Marker</string>
     <string name="action_panic">PANIC!</string>
 
     <!-- contextcontext -->
@@ -52,8 +54,15 @@
     <string name="search">Search Place</string>
     <string name="search_hint">Search Place</string>
     <string name="search_settings">Search Place Names</string>
-    <string name="title_activity_route_details">RouteDetailsActivity</string>
+    <string name="title_activity_route_details">Route Details</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="turn_left">Turn Left</string>
+    <string name="label_total">TOTAL :</string>
+    
+    <string name="preferences_demo">Application Demo</string>
+    <string name="key_preferences_demo">key_preferences_demo</string>
+    <string name="summary_preferences_demo">Enable or Disable demo</string>
+    
 
 </resources>

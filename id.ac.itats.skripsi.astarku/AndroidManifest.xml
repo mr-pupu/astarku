@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+  <!--    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />-->
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -64,13 +65,13 @@
         </activity>
         
         <activity android:name="id.ac.itats.skripsi.astarku.view.PlaceActivity" />
-       -->
+        -->
         <service android:name="id.ac.itats.skripsi.astarku.GraphService" />
 
         <provider
             android:name="id.ac.itats.skripsi.databuilder.PlaceContentProvider"
             android:authorities="id.ac.itats.skripsi.databuilder.PlaceContentProvider"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name="id.ac.itats.skripsi.astarku.view.RouteDetailsActivity"

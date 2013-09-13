@@ -69,6 +69,7 @@ public class BasicMapViewer extends SherlockFragmentActivity implements ProcessL
 	protected Polyline polyline;
 	protected List<Layer> layersOverlay = new ArrayList<Layer>();
 	protected List<LatLong> obstacleList = new ArrayList<LatLong>();
+	protected ArrayList<Vertex> resultPath; 
 
 	// Process
 	protected volatile Graph graph;

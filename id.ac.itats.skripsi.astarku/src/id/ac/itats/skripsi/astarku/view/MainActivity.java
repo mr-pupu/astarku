@@ -1,8 +1,5 @@
 package id.ac.itats.skripsi.astarku.view;
 
-import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
-
 import id.ac.itats.skripsi.astarku.AppUtil;
 import id.ac.itats.skripsi.astarku.BasicMapViewer;
 import id.ac.itats.skripsi.astarku.R;
@@ -17,7 +14,6 @@ import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.LayerManager;
 import org.mapsforge.map.layer.cache.TileCache;
-import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.model.MapViewPosition;
 
 import android.app.SearchManager;
@@ -93,12 +89,12 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		myLocationOverlay.disableMyLocation();
 
+		handleIntent(getIntent());
+
 	}
 
 	private void handleIntent(Intent intent) {
-		if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
-			doSearch(intent.getStringExtra(SearchManager.QUERY));
-		} else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+		if (intent.getData()!=null) {
 			mUri = intent.getData();
 			if (bubleMarker != null) {
 				layerManager.getLayers().remove(bubleMarker);
@@ -113,14 +109,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		setIntent(intent);
 		handleIntent(intent);
 	}
-
-	private void doSearch(String query) {
-		Bundle data = new Bundle();
-		data.putString("query", query);
-
-		// Invoking onCreateLoader() in non-ui thread
-		getSupportLoaderManager().restartLoader(1, data, this);
-	}
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -194,7 +183,9 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			if (super.myLocationOverlay.isMyLocationEnabled()) {
 				cleanLayerOverlay();
 				obstacleList.clear();
-				super.setStart(super.mapView.getModel().mapViewPosition.getMapPosition().latLong);
+				super.setStart(new LatLong(myLocationOverlay.getLastLocation().getLatitude(),
+						myLocationOverlay.getLastLocation().getLongitude()));
+				 
 				super.myLocationOverlay.requestRedraw();
 			} else {
 				// TODO show dialog or go preference activity
@@ -205,9 +196,11 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 		case R.id.action_reroute:
 			if (bubleMarker != null) {
 				layerManager.getLayers().remove(bubleMarker);
+				layerManager.redrawLayers();
 			}
 			if (polyline != null) {
 				layerManager.getLayers().remove(polyline);
+				layerManager.redrawLayers();
 			}
 
 			if (GraphAdapter.getGraph() != null) {
@@ -296,17 +289,21 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			break;
 
 		case R.id.astarku__context_setasobstacle:
-			obstacleList.add(super.touchLatLon);
-			AppUtil.log(TAG, "" + item.getTitle() + " " + super.touchLatLon);
-
+		
 			LatLong latlong = super.touchLatLon;
 			if (bubleMarker != null) {
 				latlong = bubleMarker.getLatLong();
+				layerManager.redrawLayers();
 			}
-			Marker obstacle = MapviewUtils.createMarker(this, R.drawable.ic_obstacle, latlong);
+			if (obstacle != null) {
+				layerManager.getLayers().remove(obstacle);
+				layerManager.redrawLayers();
+			}
+			obstacle = MapviewUtils.createMarker(this, R.drawable.ic_obstacle, latlong);
 			layerManager.getLayers().add(obstacle);
 			layerManager.redrawLayers();
 			layersOverlay.add(obstacle);
+			obstacleList.add(latlong);
 			bubleMarker = null;
 			break;
 
@@ -368,31 +365,37 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 			reporter = new Reporter();
 		}
 
-		LinkedList<Vertex> resultPath = null;
-		try {
-			resultPath = (LinkedList<Vertex>) astarProcessor.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-
 		if (resultPath != null) {
+			layerManager.getLayers().remove(polyline);
 			Location myLocation = myLocationOverlay.getLastLocation();
-			Vertex obstacles[] = MapMatchingUtil.panic(resultPath, myLocation.getLatitude(),
-					myLocation.getLongitude());
+			Vertex obstacles = MapMatchingUtil.doMatching(resultPath, myLocation.getLatitude(), myLocation.getLongitude());
+			reporter.addObstacle(obstacles);
 			
-			for(int i=0; i<obstacles.length;i++){
-				reporter.addObstacle(obstacles[i]);
-			}
+			resultPath.remove(obstacles);
+			obstacles = MapMatchingUtil.doMatching(resultPath, myLocation.getLatitude(), myLocation.getLongitude());
+			reporter.addObstacle(obstacles);
 			
-			processAstar(start.latitude, start.longitude, end.latitude, end.longitude);
+			processAstar(myLocation.getLatitude(), myLocation.getLongitude(), end.latitude, end.longitude);
 
 			AppUtil.log(TAG, "reroute");
 			AppUtil.log(TAG, "latlon : " + myLocation.getLatitude() + ", " + myLocation.getLongitude());
 			AppUtil.log(TAG, "obstacle : " + reporter.getObstacleList());
 			AppUtil.log(TAG, "start/end :" + start + ", " + end);
 		}
+		
+//		if (resultPath != null) {
+//			Location myLocation = myLocationOverlay.getLastLocation();
+//			Vertex obstacles[] = MapMatchingUtil.panic(resultPath, myLocation.getLatitude(), myLocation.getLongitude());
+//
+//			for (int i = 0; i < obstacles.length; i++) {
+//				reporter.addObstacle(obstacles[i]);
+//				layerManager.getLayers().add(MapviewUtils.createMarker(this, R.drawable.ic_obstacle, 
+//						new LatLong(Double.parseDouble(obstacles[i].lat),
+//						Double.parseDouble(obstacles[i].lon))));
+//				
+//			}
+//			layerManager.redrawLayers();
+//		}
 	}
 
 	private void resetZoomLevel(int zoomLevel) {
@@ -432,6 +435,7 @@ public class MainActivity extends BasicMapViewer implements ActionBar.OnNavigati
 
 			searchView.setIconified(true);
 		}
+
 	}
 
 	@Override

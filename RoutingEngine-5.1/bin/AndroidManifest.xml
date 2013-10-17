@@ -58,8 +58,8 @@
         </activity>
         <!-- Activity that shows the country details -->
         <activity android:name="id.ac.itats.skripsi.routingengine.limasatu.PlaceActivity" />
-        
-         <!-- Content Provider to query sqlite database -->
+
+        <!-- Content Provider to query sqlite database -->
         <provider
             android:name="id.ac.itats.skripsi.search.PlaceContentProvider"
             android:authorities="id.ac.itats.skripsi.search.PlaceContentProvider"

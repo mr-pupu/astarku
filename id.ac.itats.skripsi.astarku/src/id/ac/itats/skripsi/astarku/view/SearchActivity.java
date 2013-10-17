@@ -35,7 +35,7 @@ public class SearchActivity extends SherlockFragmentActivity implements LoaderCa
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent placeIntent = new Intent(getApplicationContext(), PlaceActivity.class);
+				Intent placeIntent = new Intent(getApplicationContext(), MainActivity.class);
 				
 				Uri data = Uri.withAppendedPath(PlaceContentProvider.CONTENT_URI, String.valueOf(id));
 				System.out.println(id);
@@ -58,10 +58,9 @@ public class SearchActivity extends SherlockFragmentActivity implements LoaderCa
 		Intent intent = getIntent();
 		
 		if(intent.getAction().equals(Intent.ACTION_VIEW)){
-			Intent placeIntent = new Intent(this,PlaceActivity.class);
+			Intent placeIntent = new Intent(this,MainActivity.class);
 			placeIntent.setData(intent.getData());
 			startActivity(placeIntent);
-			finish();
 		} else if (intent.getAction().equals(Intent.ACTION_SEARCH)){
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			doSearch(query);

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-  <!--    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />-->
+    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -34,13 +34,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="id.ac.itats.skripsi.astarku.view.SearchActivity" />
+        </activity>
+        <activity android:name="id.ac.itats.skripsi.astarku.view.SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".MainActivity" />
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -53,19 +56,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="id.ac.itats.skripsi.astarku.view.MainActivity" />
         </activity>
-        <!--
-        <activity android:name="id.ac.itats.skripsi.astarku.view.SearchActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        
         <activity android:name="id.ac.itats.skripsi.astarku.view.PlaceActivity" />
-        -->
+
         <service android:name="id.ac.itats.skripsi.astarku.GraphService" />
 
         <provider

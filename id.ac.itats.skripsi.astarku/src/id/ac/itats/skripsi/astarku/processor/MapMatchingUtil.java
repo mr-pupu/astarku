@@ -36,7 +36,7 @@ public class MapMatchingUtil {
 
 		for (int i = 0; i < obstacle.length; i++) {
 			for (Vertex vertex : vertexs) {
-
+				
 				double jarak = LatLongUtil.distance(gpsLat, gpsLon, Double.parseDouble(vertex.lat),
 						Double.parseDouble(vertex.lon));
 
@@ -46,7 +46,6 @@ public class MapMatchingUtil {
 					
 					System.out.println(vertex.id);
 					
-					vertexs.remove(vertex);
 					minJarak = Double.MAX_VALUE;
 				}
 

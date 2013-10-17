@@ -12,6 +12,7 @@ public class PlaceContentProvider extends ContentProvider {
 
 	public static final String AUTHORITY = "id.ac.itats.skripsi.databuilder.PlaceContentProvider";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/places");
+	public static final Uri DETAILS_URI = Uri.parse("content://"+AUTHORITY+"/places/#");
 
 	LocationAdapter locationAdapter = null;
 
